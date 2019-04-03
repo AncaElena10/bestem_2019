@@ -1,3 +1,160 @@
-<p>
-  login-register works!
-</p>
+<div class="modal" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Login</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="box">
+          <div>
+            <div id="log_with">
+              <span>Login with</span>
+            </div>
+            <div class="social">
+              <a class="circle github" href="#">
+                <i class="fa fa-github fa-fw"></i>
+              </a>
+              <a id="google_login" class="circle google" href="#">
+                <i class="fa fa-google-plus fa-fw"></i>
+              </a>
+              <a id="facebook_login" class="circle facebook" href="#">
+                <i class="fa fa-facebook fa-fw"></i>
+              </a>
+            </div>
+            <div>
+              <div id="log_with">
+                <span>or</span>
+              </div>
+            </div>
+            <div class="error"></div>
+            <div class="form loginBox">
+              <form>
+                <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off"
+                  [(ngModel)]="email">
+                <input class="form-control" type="password" placeholder="Password" name="password" autocomplete="off"
+                  [(ngModel)]="password">
+                <input class="btn btn-default btn-login" type="button" value="Login" (click)="login()">
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="forgot login-footer">
+          <span>Looking to
+            <span id="create_account" (click)="emptyFields()" data-toggle="modal" data-target="#register_modal_user"
+              data-dismiss="modal">create
+              an account</span>?
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- --------------------------------------------------------------------------------------------------------------------- -->
+
+<div class="modal" id="register_modal_user" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Register as user</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="box">
+          <div>
+            <div class="form">
+              <div class="row">
+                <div class="col">
+                  <input class="form-control" type="text" placeholder="First Name" name="firstname" autocomplete="off"
+                    [(ngModel)]="firstname">
+                </div>
+                <div class="col">
+                  <input class="form-control" type="text" placeholder="Last Name" name="lastname" autocomplete="off"
+                    [(ngModel)]="lastname">
+                </div>
+              </div>
+              <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off"
+                [(ngModel)]="email">
+              <input class="form-control" type="password" placeholder="Password" name="password" autocomplete="off"
+                [(ngModel)]="password" (keyup)="onPasswordEnter($event)"
+                [ngStyle]="{'background-color':passwordError == false ? '#d7ffd1' : '#ffd1d1' }">
+              <input class="form-control" type="password" placeholder="Repeat Password" name="password_confirmation"
+                autocomplete="off" [(ngModel)]="password_confirmation" (keyup)="onPasswordConfirmEnter($event)"
+                [ngStyle]="{'background-color':passwordError == false ? '#d7ffd1' : '#ffd1d1' }">
+              <input class="btn btn-default btn-login" type="button" value="Create account" name="commit"
+                (click)="registerAsUser()">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="forgot register-footer">
+          <span>Already have an account? </span>
+          <a id="create_account" (click)="emptyFields()" data-toggle="modal" data-target="#login_modal"
+            data-dismiss="modal">Login</a>
+        </div>
+        <div class="forgot register-footer">
+          <span>Create an <a id="create_account" (click)="emptyFields()" data-toggle="modal"
+              data-target="#register_modal_admin" data-dismiss="modal">admin account</a> instead?</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- --------------------------------------------------------------------------------------------------------------------- -->
+
+<div class="modal" id="register_modal_admin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Register as admin</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="box">
+          <div>
+            <div class="form">
+              <div class="row">
+                <div class="col">
+                  <input class="form-control" type="text" placeholder="First Name" name="firstname" autocomplete="off"
+                    [(ngModel)]="firstname">
+                </div>
+                <div class="col">
+                  <input class="form-control" type="text" placeholder="Last Name" name="lastname" autocomplete="off"
+                    [(ngModel)]="lastname">
+                </div>
+              </div>
+              <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off"
+                [(ngModel)]="email">
+              <input class="form-control" type="password" placeholder="Password" name="password" autocomplete="off"
+                [(ngModel)]="password" (keyup)="onPasswordEnter($event)"
+                [ngStyle]="{'background-color':passwordError == false ? '#d7ffd1' : '#ffd1d1' }">
+              <input class="form-control" type="password" placeholder="Repeat Password" name="password_confirmation"
+                autocomplete="off" [(ngModel)]="password_confirmation" (keyup)="onPasswordConfirmEnter($event)"
+                [ngStyle]="{'background-color':passwordError == false ? '#d7ffd1' : '#ffd1d1' }">
+              <input class="btn btn-default btn-login" type="button" value="Create account" name="commit"
+                (click)="registerAsAdmin()">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="forgot register-footer">
+          <span>Already have an account? </span>
+          <a id="create_account" (click)="emptyFields()" data-toggle="modal" data-target="#login_modal"
+            data-dismiss="modal">Login</a>
+        </div>
+        <div class="forgot register-footer">
+          <span>Create a <a id="create_account" (click)="emptyFields()" data-toggle="modal"
+              data-target="#register_modal_user" data-dismiss="modal">user account</a> instead?</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
