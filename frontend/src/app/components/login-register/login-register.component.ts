@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'app/services/api.service';
 
 @Component({
   selector: 'app-login-register',
@@ -17,7 +18,7 @@ export class LoginRegisterComponent implements OnInit {
   registerUserObject = {}
   registerAdminObject = {}
 
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
   ngOnInit() {
   }
@@ -29,6 +30,17 @@ export class LoginRegisterComponent implements OnInit {
     }
 
     // console.log(this.loginObject)
+
+    this.apiService.login(this.loginObject).subscribe((res) => {
+      console.log(res)
+      this.extractUserInfo(res)
+      // window.location.reload()
+    })
+  }
+
+  extractUserInfo(res) {
+    localStorage.setItem('id', res.id)
+    localStorage.setItem('email', res.email)
   }
 
   registerAsUser() {
@@ -36,10 +48,16 @@ export class LoginRegisterComponent implements OnInit {
       'firstname': this.firstname,
       'lastname': this.lastname,
       'email': this.email,
-      'password': this.password
+      'password': this.password,
+      'type': 'user',
     }
 
     // console.log(this.registerUserObject)
+
+    this.apiService.register(this.registerUserObject).subscribe((res) => {
+      console.log(res)
+      // window.location.reload()
+    })
   }
 
   registerAsAdmin() {
@@ -47,10 +65,17 @@ export class LoginRegisterComponent implements OnInit {
       'firstname': this.firstname,
       'lastname': this.lastname,
       'email': this.email,
-      'password': this.password
+      'password': this.password,
+      'type': 'admin'
     }
 
     // console.log(this.registerAdminObject)
+
+
+    this.apiService.register(this.registerUserObject).subscribe((res) => {
+      console.log(res)
+      // window.location.reload()
+    })
   }
 
   emptyFields() {
