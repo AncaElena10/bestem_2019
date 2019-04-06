@@ -1,4 +1,6 @@
 /// <reference types="@types/googlemaps" />
+declare var require: any;
+
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { UploadFilesService } from 'app/services/upload-files.service';
 import { FileUploader, FileLikeObject } from 'ng2-file-upload';
@@ -43,6 +45,12 @@ export class UserProfileComponent implements OnInit {
   form: FormGroup;
   loading: boolean = false;
 
+  currentIcon: any
+
+  markerInEvent: boolean = false
+
+  bounds_: any
+
   constructor(private fileUploadService: UploadFilesService, private formBuilder: FormBuilder, private fb: FacebookService) {
     this.createForm();
   }
@@ -55,15 +63,23 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.fileUploadService.getTrashPoints().subscribe((res) => {
-    //   this.extractTrashMarkers(res)
-    // })
+    this.fileUploadService.getTrashPoints().subscribe((res) => {
+      // console.log(res)
+      this.extractTrashMarkers(res)
+    })
 
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.lat = position.coords.latitude
         this.lng = position.coords.longitude
-        this.zoom = 13;
+        this.zoom = 14;
+        this.currentIcon = {
+          url: require("./icons/current.png"),
+          scaledSize: {
+            width: 60,
+            height: 70,
+          }
+        }
       });
     }
 
@@ -72,9 +88,66 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  markersLoaded: boolean = false
+
   extractTrashMarkers(res) {
-    // this.markersList
-    console.log(res)
+    for (let i = 0; i < res.length; i++) {
+      res[i].x_coord = Number(res[i].x_coord)
+      res[i].y_coord = Number(res[i].y_coord)
+    }
+
+    this.markersList = res
+    this.markersLoaded = true
+
+    console.log(this.markersList)
+
+    this.editMarkers()
+  }
+
+  editMarkers() {
+    for (let i = 0; i < this.markersList.length; i++) {
+      if (this.markersList[i].pollution_level == 'Low') {
+        this.markersList[i].icon = {
+          url: require("./icons/yellow.png"),
+          scaledSize: {
+            width: 25,
+            height: 40,
+          }
+        }
+      } else if (this.markersList[i].pollution_level == 'Medium') {
+        this.markersList[i].icon = {
+          url: require("./icons/orange.png"),
+          scaledSize: {
+            width: 25,
+            height: 40,
+          }
+        }
+      } else if (this.markersList[i].pollution_level == 'High') {
+        this.markersList[i].icon = {
+          url: require("./icons/red.png"),
+          scaledSize: {
+            width: 25,
+            height: 40,
+          }
+        }
+      }
+
+      if (this.markersList[i].event != null) {
+        this.markersList[i].icon = {
+          url: require("./icons/gray.png"),
+          scaledSize: {
+            width: 25,
+            height: 40,
+          }
+        }
+      }
+
+      if (this.markersList[i].event != null) {
+        this.markersList[i].taken = true
+      } else {
+        this.markersList[i].taken = false
+      }
+    }
   }
 
   // on map click
@@ -115,10 +188,9 @@ export class UserProfileComponent implements OnInit {
   }
 
   saveTrashPoint() {
-    console.log("aici?")
-
     this.fileUploadService.upload(this.formData).subscribe((res) => {
-      console.log(res)
+      // console.log(res)
+      window.location.reload()
     })
 
     this.placeMarker()
@@ -137,8 +209,6 @@ export class UserProfileComponent implements OnInit {
   response;
   imageURL;
 
-
-
   onChange(event) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
@@ -149,15 +219,66 @@ export class UserProfileComponent implements OnInit {
   formData = new FormData()
 
   onSubmit() {
-    console.log(this.objectToSend)
-
     this.formData.append('picture', this.form.get('profile').value)
     this.formData.append('lat', this.objectToSend.lat)
     this.formData.append('lng', this.objectToSend.lng)
     this.formData.append('level', this.objectToSend.level)
 
     console.log("submited")
+  }
 
-    // this.objectToSend.picture = formData
+  //////////// EVENT /////////////
+  newEvent: boolean = false
+  name = ""
+  ids = []
+  extra = ""
+  date = ""
+  total_person = ""
+  address = ""
+
+  objectEvent = {}
+
+  addNewEvent() {
+    this.newEvent = true
+  }
+
+  doneEvent() {
+    this.newEvent = false
+    window.location.reload()
+  }
+
+  addMarkerToEvent(id_to_be_added) {
+    this.ids.push(id_to_be_added)
+  }
+
+  saveEvent() {
+    this.objectEvent = {
+      'name': this.name,
+      'ids': this.ids,
+      'extra': this.extra,
+      'date': new Date(this.date),
+      'total_person': this.total_person,
+      'address': this.address
+    }
+
+    console.log(this.objectEvent)
+
+    this.fileUploadService.sendEvent(this.objectEvent).subscribe((res) => {
+      console.log(res)
+    })
+  }
+
+  obj
+
+  checkMarkersInBounds(bounds) {
+    this.bounds_ = bounds
+    this.obj = {
+      'latA': bounds.ma.j,
+      'latC': bounds.ma.l,
+      'longB': bounds.ga.j,
+      'longD': bounds.ga.l,
+    }
+
+    console.log(this.obj)
   }
 }

@@ -1,0 +1,157 @@
+<section class="hero-area" id="home">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-7">
+        <div class="hero-area-content">
+          <h1>Hello, there!</h1>
+          <p>Here you can find useful information and insights about waste management and recycle.</p>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="hand-mockup text-lg-left text-center">
+          <img src="assets/img/hand-mockup.png" alt="Hand Mockup" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section><!-- hero area end -->
+<!-- about section start -->
+<section class="about-area ptb-90">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="sec-title">
+          <h2>Trash Locations<span class="sec-title-border"><span></span><span></span><span></span></span></h2>
+          <p>Some trash locations</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="single-about-box">
+
+          <!--  -->
+          <div class="row text-center">
+            <div class="col-md-4">
+              <div class="btn-group">
+                <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+                  (viewDateChange)="closeOpenMonthViewDay()">
+                  Previous
+                </div>
+                <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+                  Today
+                </div>
+                <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+                  (viewDateChange)="closeOpenMonthViewDay()">
+                  Next
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+            </div>
+            <div class="col-md-4">
+              <div class="btn-group">
+                <div class="btn btn-primary" (click)="setView(CalendarView.Month)"
+                  [class.active]="view === CalendarView.Month">
+                  Month
+                </div>
+                <div class="btn btn-primary" (click)="setView(CalendarView.Week)"
+                  [class.active]="view === CalendarView.Week">
+                  Week
+                </div>
+                <div class="btn btn-primary" (click)="setView(CalendarView.Day)"
+                  [class.active]="view === CalendarView.Day">
+                  Day
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div [ngSwitch]="view">
+            <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
+              [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+              (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+            </mwl-calendar-month-view>
+            <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
+              [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+              (eventTimesChanged)="eventTimesChanged($event)">
+            </mwl-calendar-week-view>
+            <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events"
+              [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+              (eventTimesChanged)="eventTimesChanged($event)">
+            </mwl-calendar-day-view>
+          </div>
+          <!--  -->
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section><!-- about section end -->
+<!-- feature section start -->
+<section class="counter-area ptb-90">
+  <div class="container">
+    <div class="row flexbox-center">
+      <div class="col-lg-12">
+        <div class="single-counter-box">
+          <h1><span class="counter">Edit your events</span></h1>
+          <button class="btn btn-primary pull-right" (click)="addEvent()">
+            Add new
+          </button>
+          <div class="clearfix"></div>
+
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Primary color</th>
+                  <th>Secondary color</th>
+                  <th>Starts at</th>
+                  <th>Ends at</th>
+                  <th>Remove</th>
+                </tr>
+              </thead>
+
+              <tbody id="_bodyyy">
+                <tr *ngFor="let event of descs">
+                  <td>
+                    <textarea class="form-control" rows="3" [(ngModel)]="event.title[0]" (keyup)="refresh.next()"
+                      [disabled]="true"></textarea>
+                  </td>
+                  <td>
+                    <textarea class="form-control" rows="3" [(ngModel)]="event.title[1]" (keyup)="refresh.next()"
+                      [disabled]="true"></textarea>
+                  </td>
+                  <td>
+                    <input type="color" [(ngModel)]="event.color.primary" (change)="refresh.next()" />
+                  </td>
+                  <td>
+                    <input type="color" [(ngModel)]="event.color.secondary" (change)="refresh.next()" />
+                  </td>
+                  <td>
+                    <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="event.start"
+                      (ngModelChange)="refresh.next()" [altInput]="true" [convertModelValue]="true" [enableTime]="true"
+                      dateFormat="Y-m-dTH:i" altFormat="F j, Y H:i" placeholder="Not set" [disabled]="true" />
+                  </td>
+                  <td>
+                    <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="event.end"
+                      (ngModelChange)="refresh.next()" [altInput]="true" [convertModelValue]="true" [enableTime]="true"
+                      dateFormat="Y-m-dTH:i" altFormat="F j, Y H:i" placeholder="Not set" [disabled]="true" />
+                  </td>
+                  <td>
+                    <button class="btn btn-danger" (click)="deleteEvent(event)">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

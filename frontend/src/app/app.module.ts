@@ -1,3 +1,4 @@
+import 'flatpickr/dist/flatpickr.css';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -22,12 +23,21 @@ import { AgmCoreModule } from '@agm/core';
 
 import { FileUploadModule } from 'ng2-file-upload';
 
+import { FlatpickrModule } from 'angularx-flatpickr';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 import {
   SocialLoginModule,
   AuthServiceConfig,
   GoogleLoginProvider,
   FacebookLoginProvider,
 } from "angular-6-social-login";
+import { MyCalendarComponent } from './components/my-calendar/my-calendar.component';
+import { MyChrtsComponent } from './components/my-chrts/my-chrts.component';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -49,6 +59,8 @@ export function getAuthServiceConfigs() {
     HeaderComponent,
     CompareDirective,
     UserProfileComponent,
+    MyCalendarComponent,
+    MyChrtsComponent,
   ],
   imports: [
     BrowserModule,
@@ -66,6 +78,13 @@ export function getAuthServiceConfigs() {
       libraries: ['geometry']
     }),
     FileUploadModule,
+    FlatpickrModule.forRoot(),
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
+    NgbModalModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {

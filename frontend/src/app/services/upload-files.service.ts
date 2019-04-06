@@ -10,18 +10,42 @@ export class UploadFilesService {
   constructor(private http: HttpClient) { }
 
   getTrashPoints() {
-    return this.http.get('/')
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': "Bearer " + localStorage.getItem('access_token_alex')
+    })
+    return this.http.get('http://40.121.66.13:8080/api/trashpoints/get_trashpoints/', { headers: headers })
   }
 
-  DJANGO_SERVER: string = "http://40.121.66.13:8080";
-
-  public upload(formData) {
-    console.log(formData)
-
+  upload(formData) {
     const headers = new HttpHeaders({
       // 'Content-Type': 'application/json',
       'Authorization': "Bearer " + localStorage.getItem('access_token_alex')
     })
     return this.http.post<any>('http://40.121.66.13:8080/api/trashpoints/create_trashpoint/', formData, { headers: headers });
+  }
+
+  sendEvent(object) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': "Bearer " + localStorage.getItem('access_token_alex')
+    })
+    return this.http.post<any>('http://40.121.66.13:8080/api/events/create_event/', object, { headers: headers })
+  }
+
+  getAllEvents() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': "Bearer " + localStorage.getItem('access_token_alex')
+    })
+    return this.http.get('http://40.121.66.13:8080/api/events/list_events/', { headers: headers })
+  }
+
+  getAllChestii() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': "Bearer " + localStorage.getItem('access_token_alex')
+    })
+    return this.http.get('http://40.121.66.13:8080/api/events/list_events/', { headers: headers })
   }
 }

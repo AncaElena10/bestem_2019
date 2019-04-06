@@ -89,7 +89,7 @@ export class LoginRegisterComponent implements OnInit {
     this.apiService.login(this.loginObject).subscribe((res) => {
       console.log(res)
       this.extractUserInfo(res)
-      // window.location.reload()
+      window.location.reload()
     })
   }
 
