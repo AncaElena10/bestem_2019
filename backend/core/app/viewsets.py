@@ -87,21 +87,6 @@ class ManageAccountViewSets(viewsets.ModelViewSet):
 
         return response.Response(status=200, data={'error': 'Success'})
 
-    @list_route(methods=['get'])
-    def gamification_wrong(self, request, **kwargs):
-        username = request.data.get('username')
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            return response.Response(status=404, data={'error': 'User does not exist'})
-        user_id = user.id
-        print(user_id)
-        try:
-            extendedUser = ExtendedUser.objects.get(pk=user_id)    
-        except ExtendedUser.DoesNotExist:
-            return response.Response(status=404, data={'error': 'Extended User does not exist'})            
-        return response.Response(status=200, data={'error': 'Success'})
-        
     @list_route(methods=['post'])
     def gamification(self, request, **kwargs):
         username = request.data.get('username')
@@ -178,3 +163,59 @@ class ManageEventViewSets(viewsets.ModelViewSet):
             pass
 
         return response.Response(status=200, data={'error': 'Success'})
+
+
+def frequencyDistribution(data):
+    return {i: data.count(i) for i in data}   
+
+class ChartsViewSets(viewsets.ModelViewSet):
+    queryset = TrashPoint.objects.all()
+    serializer_class = TrashPointSerializer
+    
+    @list_route(methods=['post'])
+    def trash_clean(self, request, **kwargs):
+        total = TrashPoint.objects.count()
+        clean = TrashPoint.objects.filter(active=False).count()
+        dirty = total - clean
+        return response.Response(status=200, data={
+            'clean':clean,
+            'dirty':dirty,
+            'total':total})
+
+    @list_route(methods=['post'])
+    def trash_level(self, request, **kwargs):
+        total = TrashPoint.objects.count()
+        low = TrashPoint.objects.filter(pollution_level=TrashPoint.LOW).count()
+        medium = TrashPoint.objects.filter(pollution_level=TrashPoint.MEDIUM).count()
+        high = TrashPoint.objects.filter(pollution_level=TrashPoint.HIGH).count()
+        return response.Response(status=200, data={
+            'low':low,
+            'medium':medium,
+            'high':high,
+            'total':total})    
+
+    @list_route(methods=['post'])
+    def event_people(self, request, **kwargs):
+        total = Event.objects.count()
+        events = Event.objects.all()
+        list_people = []
+        for event in events:
+            list_people.append(event.users.count())
+        freq = frequencyDistribution(list_people)
+        return response.Response(status=200, data={
+            'data':freq,
+            'total':total})       
+
+    @list_route(methods=['post'])
+    def event_places(self, request, **kwargs):
+        total = Event.objects.count()
+        list_places = []
+        events = Event.objects.all()
+        for event in events:
+            number_places = TrashPoint.objects.filter(event=event).count()
+            list_places.append(number_places)
+        freq = frequencyDistribution(list_places)
+        return response.Response(status=200, data={
+            'data':freq,
+            'total':total})       
+            
