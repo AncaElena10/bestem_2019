@@ -20,6 +20,8 @@ import { RouterModule } from '@angular/router';
 
 import { AgmCoreModule } from '@agm/core';
 
+import { FileUploadModule } from 'ng2-file-upload';
+
 import {
   SocialLoginModule,
   AuthServiceConfig,
@@ -63,6 +65,7 @@ export function getAuthServiceConfigs() {
       apiKey: 'AIzaSyCkx8Bp3Rce6wTLN51OLHqbAp6qTFtzAIM',
       libraries: ['geometry']
     }),
+    FileUploadModule,
   ],
   providers: [
     {
