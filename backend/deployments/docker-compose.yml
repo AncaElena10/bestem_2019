@@ -1,0 +1,23 @@
+version: '3'
+services:
+ postgres:
+  image: postgres
+  environment:
+   POSTGRES_USER: "admin-user"
+   POSTGRES_PASSWORD: "admin-pass"
+  ports:
+   - "5431:5432"
+  volumes: 
+   - ../postgres_init:/var/lib/postgresql/data/
+ django-backend:
+  build:
+    context: ..
+    dockerfile: ./deployments/Dockerfile
+  command: ./manage.py runserver 0.0.0.0:8080
+  ports:
+   - "8080:8080"
+  volumes:
+   - ..:/core
+  depends_on:
+   - postgres
+  working_dir: /core/core
