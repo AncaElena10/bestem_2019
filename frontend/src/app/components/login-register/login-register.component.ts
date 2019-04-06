@@ -77,24 +77,25 @@ export class LoginRegisterComponent implements OnInit {
 
   login() {
     this.loginObject = {
-      'client_id': '7WkaQO17zCixjI6USBHboxeU0mQARhFq5a3JF9h2',
+      'client_id': '9Ekjd1tdFfUeVcwtv5ls4cSC0Urkm8njyMLXZ8LP',
       'grant_type': 'password',
       'password': this.password,
       'username': this.username,
-      'client_secret': 'qg0dgqUDftplLFMh682hK20jDPXXBlmYiSvqTsO5cdlY4y1XUZGX86EHgMNMwuUthg4Ng8mw0t77Hbb3r1u3XjHHDpfXxajYzamwfjyZNMojiCoIMQLwQDa2o4BwKnR6'
+      'client_secret': 'xR6Ev9u5vo2XFoNNZZ35HkLDEha3U0UhMhaEBNGsyehAGgSMcbbqCIuKSVu21XmrNTrUqeZZjGxHsz0OxvDFjbfHeBm0Iwi26BPuMGzE0VQYetRrfoitcq2ATE2HR9Oc'
     }
 
     // console.log(this.loginObject)
 
     this.apiService.login(this.loginObject).subscribe((res) => {
-      // console.log(res)
-      this.extractUserInfo()
-      window.location.reload()
+      console.log(res)
+      this.extractUserInfo(res)
+      // window.location.reload()
     })
   }
 
-  extractUserInfo() {
+  extractUserInfo(res) {
     localStorage.setItem('userID', 'loggedIn')
+    localStorage.setItem('access_token_alex', res.access_token)
   }
 
   registerAsUser() {

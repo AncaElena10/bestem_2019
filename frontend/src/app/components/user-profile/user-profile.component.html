@@ -56,12 +56,23 @@
   </div>
 </section><!-- about section end -->
 <!-- feature section start -->
-<section class="feature-area ptb-90" id="feature">
+<section class="counter-area ptb-90">
   <div class="container">
     <div class="row flexbox-center">
       <div class="col-lg-12">
-        <div class="sec-title">
-          <h1 style="color: white">Add a new event</h1>
+        <!-- <h1 style="color: white">Add a new event</h1>
+          <i class="icofont icofont-protect"></i> -->
+        <div class="single-counter-box">
+          <i class="icofont icofont-protect"></i>
+          <h1><span class="counter">Add a new event</span></h1>
+          <!-- <a href="#" class="download-btn flexbox-center" (click)="share()">
+            <div class="download-btn-icon">
+              <i class="icofont icofont-brand-android-robot"></i>
+            </div>
+            <div class="download-btn-text">
+              <h4>Share Event</h4>
+            </div>
+          </a> -->
         </div>
       </div>
     </div>
@@ -110,54 +121,6 @@
     </div>
   </div>
 </section><!-- showcase section end -->
-<!-- video section start -->
-<section class="video-area ptb-90">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="video-popup">
-          <a href="https://www.youtube.com/watch?v=RZXnugbhw_4" class="popup-youtube"><i
-              class="icofont icofont-ui-play"></i></a>
-          <h1>Watch Video Demo</h1>
-        </div>
-      </div>
-    </div>
-  </div>
-</section><!-- video section end -->
-<!-- screenshots section start -->
-<section class="screenshots-area ptb-90" id="screenshot">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="sec-title">
-          <h2>Screenshot<span class="sec-title-border"><span></span><span></span><span></span></span></h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="screenshot-wrap">
-          <div class="single-screenshot">
-            <img src="assets/img/screenshot/screenshot1.jpg" alt="screenshot" />
-          </div>
-          <div class="single-screenshot">
-            <img src="assets/img/screenshot/screenshot2.jpg" alt="screenshot" />
-          </div>
-          <div class="single-screenshot">
-            <img src="assets/img/screenshot/screenshot3.jpg" alt="screenshot" />
-          </div>
-          <div class="single-screenshot">
-            <img src="assets/img/screenshot/screenshot4.jpg" alt="screenshot" />
-          </div>
-          <div class="single-screenshot">
-            <img src="assets/img/screenshot/screenshot5.jpg" alt="screenshot" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section><!-- screenshots section end -->
 <!-- pricing section start -->
 <section class="pricing-area ptb-90" id="pricing">
   <div class="container">
@@ -607,7 +570,7 @@
           </select>
         </div>
         <div class="form-group" style="text-align: center;">
-          <div ng2FileDrop [ngClass]="{'drop-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+          <!-- <div ng2FileDrop [ngClass]="{'drop-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
             [uploader]="uploader" class="area">
             <div id="dropZone">Drop files here</div>
           </div>
@@ -617,12 +580,21 @@
             <li *ngFor="let item of uploader.queue">
               {{ item?.file?.name }}
             </li>
-          </ul>
+          </ul> -->
+
+          <div *ngIf="response && imageURL">
+            <img [src]='imageURL' />
+          </div>
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <input type="file" name="profile" (change)="onChange($event)" />
+            <button type="submit">Upload Image File</button>
+          </form>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="saveUser()" data-dismiss="modal">Save changes</button>
+        <button type="button" class="btn btn-primary" (click)="saveTrashPoint()" data-dismiss="modal">Save
+          changes</button>
       </div>
     </div>
   </div>

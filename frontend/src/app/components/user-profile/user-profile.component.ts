@@ -3,6 +3,10 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { UploadFilesService } from 'app/services/upload-files.service';
 import { FileUploader, FileLikeObject } from 'ng2-file-upload';
 import { concat } from 'rxjs';
+import { UtilsService } from 'app/services/utils.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+import { FacebookService, LoginResponse, LoginOptions, UIResponse, UIParams, FBVideoComponent } from 'ngx-facebook';
 
 @Component({
   selector: 'app-user-profile',
@@ -21,7 +25,7 @@ export class UserProfileComponent implements OnInit {
   poluation_level = ['Select level', 'Low', 'Medium', 'High']
   selectedLevel = this.poluation_level[0];
 
-  objectToSend = { 'lat': '', 'lng': '', 'level': '', 'picture': {} }
+  objectToSend = { 'lat': '', 'lng': '', 'level': '' }
   fileToUpload: File = null;
 
   markersList = []
@@ -34,9 +38,27 @@ export class UserProfileComponent implements OnInit {
   @ViewChild('triggerButtonTrash') triggerButtonTrash: ElementRef;
   map_: any
 
-  constructor(private fileUploadService: UploadFilesService) { }
+  //////
+  @ViewChild('fileInput') fileInput: ElementRef;
+  form: FormGroup;
+  loading: boolean = false;
+
+  constructor(private fileUploadService: UploadFilesService, private formBuilder: FormBuilder, private fb: FacebookService) {
+    this.createForm();
+  }
+
+  createForm() {
+    this.form = this.formBuilder.group({
+      name: ['', Validators.required],
+      avatar: null
+    });
+  }
 
   ngOnInit() {
+    // this.fileUploadService.getTrashPoints().subscribe((res) => {
+    //   this.extractTrashMarkers(res)
+    // })
+
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.lat = position.coords.latitude
@@ -44,6 +66,15 @@ export class UserProfileComponent implements OnInit {
         this.zoom = 13;
       });
     }
+
+    this.form = this.formBuilder.group({
+      profile: ['']
+    });
+  }
+
+  extractTrashMarkers(res) {
+    // this.markersList
+    console.log(res)
   }
 
   // on map click
@@ -83,11 +114,12 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  saveUser() {
-    let files = this.getFiles();
-    this.objectToSend.picture = files[0]
+  saveTrashPoint() {
+    console.log("aici?")
 
-    console.log(this.objectToSend)
+    this.fileUploadService.upload(this.formData).subscribe((res) => {
+      console.log(res)
+    })
 
     this.placeMarker()
   }
@@ -98,5 +130,34 @@ export class UserProfileComponent implements OnInit {
 
   isInfoWindowOpen(id) {
     return this.openedWindow == id
+  }
+
+
+  // ////////////////////////
+  response;
+  imageURL;
+
+
+
+  onChange(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.form.get('profile').setValue(file);
+    }
+  }
+
+  formData = new FormData()
+
+  onSubmit() {
+    console.log(this.objectToSend)
+
+    this.formData.append('picture', this.form.get('profile').value)
+    this.formData.append('lat', this.objectToSend.lat)
+    this.formData.append('lng', this.objectToSend.lng)
+    this.formData.append('level', this.objectToSend.level)
+
+    console.log("submited")
+
+    // this.objectToSend.picture = formData
   }
 }
