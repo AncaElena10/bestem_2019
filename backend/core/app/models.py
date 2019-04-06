@@ -6,12 +6,22 @@ class Test(models.Model):
     name = models.CharField(max_length=32)
 
 class Event(models.Model):
+    ACTIVE = "Active"
+    COMPLETED = "Completed"
+
+    STATUS = (
+        (ACTIVE, "Active"),
+        (COMPLETED, "Completed")
+    )
     name = models.CharField(max_length=32)
     users = models.ManyToManyField(User, blank=True)
     date = models.DateTimeField()
-    total_persons = models.IntegerField()
-    extra = models.TextField()
-    
+    total_persons = models.IntegerField(null=True, blank=True)
+    extra = models.TextField(null=True, blank=True)
+    status =  models.CharField(max_length=50, choices=STATUS, default=ACTIVE)
+    owner = models.ForeignKey(User, null=True, related_name="owner", on_delete=models.CASCADE)
+    address = models.TextField(null=True, blank=True)
+
     def __str__(self):
         return "{}".format(self.name)
 
@@ -31,7 +41,7 @@ class TrashPoint(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
     pollution_level =  models.CharField(max_length=50, choices=LEVEL, null=False, blank=False)
     active = models.BooleanField(default=True)
-    event = models.ForeignKey(Event, null=True, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, null=True, blank=True, on_delete=models.CASCADE)
     picture = models.FileField(blank=True, null=True)
 
     def __str__(self):

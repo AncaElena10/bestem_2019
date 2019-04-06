@@ -1,6 +1,6 @@
 from rest_framework import viewsets, response
-from app.models import Test, TrashPoint, ExtendedUser
-from .serializers import TestSerializer, TrashPointSerializer, ManageAccountSerializer
+from app.models import Test, TrashPoint, Event, ExtendedUser
+from .serializers import TestSerializer, TrashPointSerializer, EventSerializer, ManageAccountSerializer
 from rest_framework.decorators import list_route, detail_route
 from django.contrib.auth.models import User, AnonymousUser
 from .views import email
@@ -54,7 +54,7 @@ class TrashPointViewSets(viewsets.ModelViewSet):
         if request.user.is_anonymous:
             return response.Response(status=400, data={'error': 'User is not logged!'})
         
-        trahspoints = TrashPoint.objects.all()
+        trahspoints = TrashPoint.objects.filter(active=True)
         serializer = self.get_serializer(trahspoints, many=True)
         return response.Response(serializer.data)
 
@@ -81,7 +81,60 @@ class ManageAccountViewSets(viewsets.ModelViewSet):
         extendedUser = ExtendedUser.objects.create(
             user_id=user,
             phone=phone,
-            role=role)
+            role=role,
+        )
         extendedUser.save()
 
-        return response.Response(status=200, data={'error': 'Success'})        
+        return response.Response(status=200, data={'error': 'Success'})
+    
+class ManageEventViewSets(viewsets.ModelViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+
+    @list_route(methods=['post'])
+    def create_event(self, request, **kwargs):
+        if request.user.is_anonymous:
+            return response.Response(status=400, data={'error': 'User is not logged!'})
+        
+        name = request.data.get('name')
+        extra = request.data.get('extra')
+        date = request.data.get('date')
+        total_persons = request.data.get('total_persons')
+        address = request.data.get('address')
+        trash_ids = request.data.get("ids")
+        owner = request.user
+        
+        event = Event.objects.create(
+            name=name,
+            extra=extra,
+            date=date,
+            total_persons=total_persons,
+            owner=owner,
+            address=address,
+        )
+
+        total_points = 0
+        for ti in trash_ids:
+            try:
+                trash = TrashPoint.objects.get(id=ti)
+            except:
+                return response.Response(status=404)
+
+            if trash.pollution_level == TrashPoint.HIGH:
+                total_points += 20
+            if trash.pollution_level == TrashPoint.MEDIUM:
+                total_points += 10      
+            if trash.pollution_level == TrashPoint.LOW:
+                total_points += 5
+            
+            trash.event = event
+            trash.save()
+
+        try:
+            user = ExtendedUser.objects.get(user_id=owner.id)
+            user.points += total_points
+            user.save()
+        except:
+            pass
+
+        return response.Response(status=200, data={'error': 'Success'})
