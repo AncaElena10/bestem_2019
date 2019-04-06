@@ -9,4 +9,4 @@ class TestSerializer(serializers.ModelSerializer):
 class TrashPointSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrashPoint
-        fields = ('id', 'x_coord', 'y_coord', 'user_id', 'pollution_level', 'active', 'event')
+        fields = ('id', 'x_coord', 'y_coord', 'user_id', 'pollution_level', 'active', 'event', 'picture')

@@ -4,6 +4,7 @@ from .serializers import TestSerializer, TrashPointSerializer
 from rest_framework.decorators import list_route, detail_route
 from django.contrib.auth.models import User, AnonymousUser
 from .views import email
+from rest_framework.parsers import FileUploadParser
 
 class TestViewSets(viewsets.ModelViewSet):
     queryset = Test.objects.all()
@@ -23,6 +24,7 @@ class TestViewSets(viewsets.ModelViewSet):
         email(request)
 
 class TrashPointViewSets(viewsets.ModelViewSet):
+    parser_class = (FileUploadParser,)
     queryset = TrashPoint.objects.all()
     serializer_class = TrashPointSerializer
 
@@ -34,13 +36,17 @@ class TrashPointViewSets(viewsets.ModelViewSet):
         lat = request.data.get('lat')
         lng = request.data.get('lng')
         level = request.data.get('level')
+        picture = request.data.get('picture')
+        picture = request.FILES['picture']
+        print(picture)
         user = request.user
-        
+
         tp = TrashPoint.objects.create(
             x_coord=lat,
             y_coord=lng,
             user=user,
             pollution_level=level,
+            picture=picture,
         )
         serializer = self.get_serializer(tp)
         return response.Response(serializer.data)
