@@ -152,7 +152,7 @@ class ManageEventViewSets(viewsets.ModelViewSet):
         return response.Response(status=200, data={'error': 'Success'})
 
     @list_route(methods=['get'])
-    def create_events(self, request, **kwargs):
+    def list_events(self, request, **kwargs):
         if request.user.is_anonymous:
             return response.Response(status=400, data={'error': 'User is not logged!'})
         
