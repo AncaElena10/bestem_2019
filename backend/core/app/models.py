@@ -32,6 +32,7 @@ class TrashPoint(models.Model):
     pollution_level =  models.CharField(max_length=50, choices=LEVEL, null=False, blank=False)
     active = models.BooleanField(default=True)
     event = models.ForeignKey(Event, null=True, on_delete=models.CASCADE)
+    picture = models.FileField(blank=True, null=True)
 
     def __str__(self):
         return "Trash Point {}".format(self.id)
