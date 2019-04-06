@@ -1,8 +1,19 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Test(models.Model):
     name = models.CharField(max_length=32)
+
+class Event(models.Model):
+    name = models.CharField(max_length=32)
+    users = models.ManyToManyField(User, blank=True)
+    date = models.DateTimeField()
+    total_persons = models.IntegerField()
+    extra = models.TextField()
+    
+    def __str__(self):
+        return "{}".format(self.name)
 
 class TrashPoint(models.Model):
     LOW = "Low"
@@ -17,6 +28,11 @@ class TrashPoint(models.Model):
 
     x_coord = models.FloatField()
     y_coord = models.FloatField()
-    #user_id = models.ForeignKey('User', null=False, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
     pollution_level =  models.CharField(max_length=50, choices=LEVEL, null=False, blank=False)
     active = models.BooleanField(default=True)
+    event = models.ForeignKey(Event, null=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Trash Point {}".format(self.id)
+
