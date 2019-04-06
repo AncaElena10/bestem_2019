@@ -13,13 +13,38 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { CompareDirective } from './directives/compare.directive';
 
+import { FacebookModule } from 'ngx-facebook';
+import { AvatarModule } from 'ngx-avatar';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { RouterModule } from '@angular/router';
+
+import {
+  SocialLoginModule,
+  AuthServiceConfig,
+  GoogleLoginProvider,
+  FacebookLoginProvider,
+} from "angular-6-social-login";
+
+export function getAuthServiceConfigs() {
+  let config = new AuthServiceConfig(
+    [
+      {
+        id: FacebookLoginProvider.PROVIDER_ID,
+        provider: new FacebookLoginProvider("139336530185484")
+      }
+    ]
+  );
+  return config;
+}
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginRegisterComponent,
     HomeComponent,
     HeaderComponent,
-    CompareDirective
+    CompareDirective,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,8 +53,17 @@ import { CompareDirective } from './directives/compare.directive';
     ReactiveFormsModule,
     HttpClientModule,
     HttpModule,
+    RouterModule,
+    FacebookModule.forRoot(),
+    AvatarModule,
+    SocialLoginModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: AuthServiceConfig,
+      useFactory: getAuthServiceConfigs
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

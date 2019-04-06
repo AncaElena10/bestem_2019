@@ -23,3 +23,19 @@
 .buttons_ {
   display: inline-flex;
 }
+
+.profile_pic {
+  display: flex;
+}
+
+.mainmenu li a.appao-btn,
+.appao-btn {
+  border: 1px solid #fff;
+  color: #fff;
+  border-radius: 15px;
+  padding: 12px 21px;
+  display: inline-block;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 500;
+}

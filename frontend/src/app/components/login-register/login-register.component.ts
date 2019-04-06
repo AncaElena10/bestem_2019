@@ -1,5 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ApiService } from 'app/services/api.service';
+// import { FacebookService, InitParams, LoginResponse } from 'ngx-facebook';
+import { FacebookService, LoginResponse, LoginOptions, UIResponse, UIParams, FBVideoComponent, InitParams } from 'ngx-facebook';
+import { Router } from '@angular/router';
+import {
+  AuthService,
+  FacebookLoginProvider,
+  GoogleLoginProvider
+} from 'angular-6-social-login';
+
+var FB: any
 
 @Component({
   selector: 'app-login-register',
@@ -18,9 +28,48 @@ export class LoginRegisterComponent implements OnInit {
   registerUserObject = {}
   registerAdminObject = {}
 
-  constructor(private apiService: ApiService) { }
+  userID = ""
+  accessToken = ""
+
+  constructor(private apiService: ApiService, private fb: FacebookService, public _router: Router, public _zone: NgZone, private socialAuthService: AuthService) {
+    console.log('Initializing Facebook');
+    let initParams: InitParams = {
+      appId: '139336530185484',
+      xfbml: true,
+      version: 'v2.8'
+    };
+
+    fb.init(initParams);
+  }
+
+  loginWithFacebook(): void {
+    this.fb.login()
+      .then((response: LoginResponse) => {
+        console.log(response)
+        this.userID = response.authResponse.userID
+        this.accessToken = response.authResponse.accessToken
+        localStorage.setItem("userID", this.userID)
+        if (response.status === 'connected') {
+          this._router.navigateByUrl('/user-profile');
+        }
+      })
+      .catch((error: any) => console.error(error));
+
+    // this._router.navigateByUrl('/user-profile');
+  }
+
+  sendToken() {
+    var obj = {
+      'accessToken': this.accessToken
+    }
+
+    this.apiService.sendToken(obj).subscribe((res) => {
+      console.log(res)
+    })
+  }
 
   ngOnInit() {
+
   }
 
   login() {

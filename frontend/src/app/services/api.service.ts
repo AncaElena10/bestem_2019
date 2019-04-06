@@ -15,4 +15,8 @@ export class ApiService {
   register(object) {
     return this.http.post("/register", object)
   }
+
+  sendToken(object) {
+    return this.http.post("/", object)
+  }
 }
