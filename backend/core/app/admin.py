@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Test, Event, TrashPoint
+from .models import Test, Event, TrashPoint, ExtendedUser
 
 # Register your models here.
 @admin.register(Test)
@@ -13,3 +13,7 @@ class EventAdmin(admin.ModelAdmin):
 @admin.register(TrashPoint)
 class TrashPointAdmin(admin.ModelAdmin):
     list_display = ('x_coord', 'y_coord', 'user_id', 'pollution_level', 'active', 'event')
+
+@admin.register(ExtendedUser)
+class ExtendedUserAdmin(admin.ModelAdmin):
+    list_display = ('user_id', 'phone', 'points', 'role')    

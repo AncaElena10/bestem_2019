@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Test, TrashPoint
+from django.contrib.auth.models import User
 
 class TestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,3 +11,8 @@ class TrashPointSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrashPoint
         fields = ('id', 'x_coord', 'y_coord', 'user_id', 'pollution_level', 'active', 'event', 'picture')
+
+class ManageAccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'username', 'password', 'first_name', 'last_name')        
