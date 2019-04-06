@@ -86,7 +86,47 @@ class ManageAccountViewSets(viewsets.ModelViewSet):
         extendedUser.save()
 
         return response.Response(status=200, data={'error': 'Success'})
-    
+
+    @list_route(methods=['get'])
+    def gamification_wrong(self, request, **kwargs):
+        username = request.data.get('username')
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return response.Response(status=404, data={'error': 'User does not exist'})
+        user_id = user.id
+        print(user_id)
+        try:
+            extendedUser = ExtendedUser.objects.get(pk=user_id)    
+        except ExtendedUser.DoesNotExist:
+            return response.Response(status=404, data={'error': 'Extended User does not exist'})            
+        return response.Response(status=200, data={'error': 'Success'})
+        
+    @list_route(methods=['post'])
+    def gamification(self, request, **kwargs):
+        username = request.data.get('username')
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return response.Response(status=404, data={'error': 'User does not exist'})
+        try:
+            extendedUser = ExtendedUser.objects.get(user_id=user.id)
+        except User.DoesNotExist:
+            return response.Response(status=404, data={'error': 'Except User does not exist'})  
+
+        points = extendedUser.points
+        number_events_created = Event.objects.filter(owner=user).count()
+        number_events_participated = Event.objects.filter(users__username=username).count()
+        number_places_reported = TrashPoint.objects.filter(user=user).count()
+        return response.Response(status=200, data={
+            'username':username,
+            'points':points,
+            'number_events_created':number_events_created,
+            'number_events_participated':number_events_participated,
+            'number_places_reported':number_places_reported
+            })
+
+
 class ManageEventViewSets(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
