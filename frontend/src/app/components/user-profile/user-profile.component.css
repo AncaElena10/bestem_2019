@@ -1,0 +1,24 @@
+agm-map {
+  height: 600px;
+}
+
+.area {
+  padding: 15px;
+  margin: 15px;
+  border: 1px solid rgb(175, 164, 164);
+  background: whitesmoke;
+}
+
+#dropZone {
+  border: 2px dashed #bbb;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 50px;
+  text-align: center;
+  font: 21pt bold arial;
+  color: #bbb;
+}
+
+.drop-file-over {
+  background: #333;
+}

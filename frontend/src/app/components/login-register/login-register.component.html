@@ -30,11 +30,12 @@
             <div class="error"></div>
             <div class="form loginBox">
               <form>
-                <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off"
-                  [(ngModel)]="email">
+                <input class="form-control" type="text" placeholder="Username" name="username" autocomplete="off"
+                  [(ngModel)]="username">
                 <input class="form-control" type="password" placeholder="Password" name="password" autocomplete="off"
                   [(ngModel)]="password">
-                <input class="btn btn-default btn-login" type="button" value="Login" (click)="login()">
+                <input class="btn btn-default btn-login" type="button" value="Login" (click)="login()"
+                  data-dismiss="modal">
               </form>
             </div>
           </div>
@@ -77,8 +78,8 @@
                     [(ngModel)]="lastname">
                 </div>
               </div>
-              <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off"
-                [(ngModel)]="email">
+              <input class="form-control" type="text" placeholder="Username" name="username" autocomplete="off"
+                [(ngModel)]="username">
               <input class="form-control" type="password" placeholder="Password" name="password" autocomplete="off"
                 [(ngModel)]="password" (keyup)="onPasswordEnter($event)"
                 [ngStyle]="{'background-color':passwordError == false ? '#d7ffd1' : '#ffd1d1' }">
@@ -130,8 +131,8 @@
                     [(ngModel)]="lastname">
                 </div>
               </div>
-              <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off"
-                [(ngModel)]="email">
+              <input class="form-control" type="text" placeholder="Username" name="username" autocomplete="off"
+                [(ngModel)]="username">
               <input class="form-control" type="password" placeholder="Password" name="password" autocomplete="off"
                 [(ngModel)]="password" (keyup)="onPasswordEnter($event)"
                 [ngStyle]="{'background-color':passwordError == false ? '#d7ffd1' : '#ffd1d1' }">
