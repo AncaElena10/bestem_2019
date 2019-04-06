@@ -18,6 +18,8 @@ import { AvatarModule } from 'ngx-avatar';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { RouterModule } from '@angular/router';
 
+import { AgmCoreModule } from '@agm/core';
+
 import {
   SocialLoginModule,
   AuthServiceConfig,
@@ -57,6 +59,10 @@ export function getAuthServiceConfigs() {
     FacebookModule.forRoot(),
     AvatarModule,
     SocialLoginModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCkx8Bp3Rce6wTLN51OLHqbAp6qTFtzAIM',
+      libraries: ['geometry']
+    }),
   ],
   providers: [
     {
