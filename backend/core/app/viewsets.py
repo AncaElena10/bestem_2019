@@ -157,5 +157,5 @@ class ManageEventViewSets(viewsets.ModelViewSet):
             return response.Response(status=400, data={'error': 'User is not logged!'})
         
         events = Event.objects.all()
-        serializer = self.get_serializer(events)
+        serializer = self.get_serializer(events, many=True)
         return response.Response(serializer.data)
