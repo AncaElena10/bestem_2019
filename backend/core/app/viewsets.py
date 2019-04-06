@@ -86,6 +86,18 @@ class ManageAccountViewSets(viewsets.ModelViewSet):
         extendedUser.save()
 
         return response.Response(status=200, data={'error': 'Success'})
+
+    @list_route(methods=['get'])
+    def total_points(self, request, **kwargs):
+        if request.user.is_anonymous:
+            return response.Response(status=400, data={'error': 'User is not logged!'})
+        
+        try:
+            user = ExtendedUser.objects.get(user_id=request.user.id)
+        except:
+            return response.Response(status=200, data={'points': None})
+        return response.Response(status=200, data={'points': user.points})
+        
     
 class ManageEventViewSets(viewsets.ModelViewSet):
     queryset = Event.objects.all()
