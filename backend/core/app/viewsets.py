@@ -150,3 +150,12 @@ class ManageEventViewSets(viewsets.ModelViewSet):
             pass
 
         return response.Response(status=200, data={'error': 'Success'})
+
+    @list_route(methods=['get'])
+    def create_events(self, request, **kwargs):
+        if request.user.is_anonymous:
+            return response.Response(status=400, data={'error': 'User is not logged!'})
+        
+        events = Event.objects.all()
+        serializer = self.get_serializer(events)
+        return response.Response(serializer.data)
