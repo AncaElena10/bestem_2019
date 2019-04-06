@@ -1,8 +1,8 @@
 from rest_framework import viewsets, response
-from app.models import Test
-from .serializers import TestSerializer
+from app.models import Test, TrashPoint
+from .serializers import TestSerializer, TrashPointSerializer
 from rest_framework.decorators import list_route, detail_route
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from .views import email
 
 class TestViewSets(viewsets.ModelViewSet):
@@ -21,3 +21,26 @@ class TestViewSets(viewsets.ModelViewSet):
     def myemail(self, request, **kwargs):
         # blabal
         email(request)
+
+class TrashPointViewSets(viewsets.ModelViewSet):
+    queryset = TrashPoint.objects.all()
+    serializer_class = TrashPointSerializer
+
+    @list_route(methods=['post'])
+    def create_trashpoint(self, request, **kwargs):
+        if request.user.is_anonymous:
+            return response.Response(status=400, data={'error': 'User is not logged!'})
+        
+        lat = request.data.get('lat')
+        lng = request.data.get('lng')
+        level = request.data.get('level')
+        user = request.user
+        
+        tp = TrashPoint.objects.create(
+            x_coord=lat,
+            y_coord=lng,
+            user=user,
+            pollution_level=level,
+        )
+        serializer = self.get_serializer(tp)
+        return response.Response(serializer.data)
