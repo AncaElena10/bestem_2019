@@ -142,9 +142,6 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookAppOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
 
-    # Google OAuth2
-    'social.backends.google.GoogleOAuth2',
-
     # django-rest-framework-social-oauth2
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
 
@@ -163,9 +160,5 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email'
 }
 
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '579252782666-tgpq7l47ou24cadrc11q1v83q636j80n.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'I2lqP5EYijrNJAuXaboUfgvt'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email',]
 
 
