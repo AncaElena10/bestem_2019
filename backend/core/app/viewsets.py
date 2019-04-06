@@ -97,8 +97,15 @@ class ManageAccountViewSets(viewsets.ModelViewSet):
         except:
             return response.Response(status=200, data={'points': None})
         return response.Response(status=200, data={'points': user.points})
-        
     
+    @list_route(methods=['get'])
+    def get_user_info(self, request, **kwargs):
+        if request.user.is_anonymous:
+            return response.Response(status=400, data={'error': 'User is not logged!'})
+        serializer = self.get_serializer(request.user)
+        return response.Response(serializer.data)
+
+
 class ManageEventViewSets(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer

@@ -15,7 +15,7 @@ class TrashPointSerializer(serializers.ModelSerializer):
 class ManageAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'username', 'password', 'first_name', 'last_name')        
+        fields = ('id', 'email', 'username', 'password', 'first_name', 'last_name')        
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
