@@ -104,6 +104,30 @@ class ManageAccountViewSets(viewsets.ModelViewSet):
             return response.Response(status=400, data={'error': 'User is not logged!'})
         serializer = self.get_serializer(request.user)
         return response.Response(serializer.data)
+        
+    @list_route(methods=['post'])
+    def gamification(self, request, **kwargs):
+        username = request.data.get('username')
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return response.Response(status=404, data={'error': 'User does not exist'})
+        try:
+            extendedUser = ExtendedUser.objects.get(user_id=user.id)
+        except User.DoesNotExist:
+            return response.Response(status=404, data={'error': 'Except User does not exist'})  
+
+        points = extendedUser.points
+        number_events_created = Event.objects.filter(owner=user).count()
+        number_events_participated = Event.objects.filter(users__username=username).count()
+        number_places_reported = TrashPoint.objects.filter(user=user).count()
+        return response.Response(status=200, data={
+            'username':username,
+            'points':points,
+            'number_events_created':number_events_created,
+            'number_events_participated':number_events_participated,
+            'number_places_reported':number_places_reported
+            })
 
 
 class ManageEventViewSets(viewsets.ModelViewSet):
@@ -158,6 +182,7 @@ class ManageEventViewSets(viewsets.ModelViewSet):
 
         return response.Response(status=200, data={'error': 'Success'})
 
+<<<<<<< HEAD
     @list_route(methods=['get'])
     def list_events(self, request, **kwargs):
         if request.user.is_anonymous:
@@ -166,3 +191,60 @@ class ManageEventViewSets(viewsets.ModelViewSet):
         events = Event.objects.all()
         serializer = self.get_serializer(events, many=True)
         return response.Response(serializer.data)
+=======
+
+def frequencyDistribution(data):
+    return {i: data.count(i) for i in data}   
+
+class ChartsViewSets(viewsets.ModelViewSet):
+    queryset = TrashPoint.objects.all()
+    serializer_class = TrashPointSerializer
+    
+    @list_route(methods=['post'])
+    def trash_clean(self, request, **kwargs):
+        total = TrashPoint.objects.count()
+        clean = TrashPoint.objects.filter(active=False).count()
+        dirty = total - clean
+        return response.Response(status=200, data={
+            'clean':clean,
+            'dirty':dirty,
+            'total':total})
+
+    @list_route(methods=['post'])
+    def trash_level(self, request, **kwargs):
+        total = TrashPoint.objects.count()
+        low = TrashPoint.objects.filter(pollution_level=TrashPoint.LOW).count()
+        medium = TrashPoint.objects.filter(pollution_level=TrashPoint.MEDIUM).count()
+        high = TrashPoint.objects.filter(pollution_level=TrashPoint.HIGH).count()
+        return response.Response(status=200, data={
+            'low':low,
+            'medium':medium,
+            'high':high,
+            'total':total})    
+
+    @list_route(methods=['post'])
+    def event_people(self, request, **kwargs):
+        total = Event.objects.count()
+        events = Event.objects.all()
+        list_people = []
+        for event in events:
+            list_people.append(event.users.count())
+        freq = frequencyDistribution(list_people)
+        return response.Response(status=200, data={
+            'data':freq,
+            'total':total})       
+
+    @list_route(methods=['post'])
+    def event_places(self, request, **kwargs):
+        total = Event.objects.count()
+        list_places = []
+        events = Event.objects.all()
+        for event in events:
+            number_places = TrashPoint.objects.filter(event=event).count()
+            list_places.append(number_places)
+        freq = frequencyDistribution(list_places)
+        return response.Response(status=200, data={
+            'data':freq,
+            'total':total})       
+            
+>>>>>>> alina2
