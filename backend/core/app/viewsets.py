@@ -1,6 +1,6 @@
 from rest_framework import viewsets, response
-from app.models import Test, TrashPoint
-from .serializers import TestSerializer, TrashPointSerializer
+from app.models import Test, TrashPoint, ExtendedUser
+from .serializers import TestSerializer, TrashPointSerializer, ManageAccountSerializer
 from rest_framework.decorators import list_route, detail_route
 from django.contrib.auth.models import User, AnonymousUser
 from .views import email
@@ -57,3 +57,31 @@ class TrashPointViewSets(viewsets.ModelViewSet):
         trahspoints = TrashPoint.objects.all()
         serializer = self.get_serializer(trahspoints, many=True)
         return response.Response(serializer.data)
+
+class ManageAccountViewSets(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = ManageAccountSerializer
+
+    @list_route(methods=['post'])
+    def register(self, request, **kwargs):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        firstName = request.data.get('firstName')
+        lastName = request.data.get('lastName')
+        username = request.data.get('username')
+        phone = str(request.data.get('phone'))
+        role = request.data.get('role')
+        
+        user = User.objects.create_user(username, password)
+        user.email = email
+        user.first_name = firstName
+        user.last_name = lastName        
+        user.save()
+
+        extendedUser = ExtendedUser.objects.create(
+            user_id=user,
+            phone=phone,
+            role=role)
+        extendedUser.save()
+
+        return response.Response(status=200, data={'error': 'Success'})        

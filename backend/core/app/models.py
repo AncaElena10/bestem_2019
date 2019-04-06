@@ -37,3 +37,20 @@ class TrashPoint(models.Model):
     def __str__(self):
         return "Trash Point {}".format(self.id)
 
+class ExtendedUser(models.Model):
+    VOLUNTEER = "Volunteer"
+    COLLECTOR = "Collector"
+    ADMIN = "Admin"
+
+
+    ROLE = (
+        (VOLUNTEER, "Volunteer"),
+        (COLLECTOR, "Collector"),
+        (ADMIN, "Admin"),
+    )
+
+    user_id = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=20)
+    points = models.IntegerField(default=0)
+    role =  models.CharField(max_length=50, choices=ROLE, null=False, blank=False)
+    
