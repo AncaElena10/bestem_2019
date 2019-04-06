@@ -37,8 +37,6 @@ class TrashPointViewSets(viewsets.ModelViewSet):
         lng = request.data.get('lng')
         level = request.data.get('level')
         picture = request.data.get('picture')
-        picture = request.FILES['picture']
-        print(picture)
         user = request.user
 
         tp = TrashPoint.objects.create(
@@ -49,4 +47,13 @@ class TrashPointViewSets(viewsets.ModelViewSet):
             picture=picture,
         )
         serializer = self.get_serializer(tp)
+        return response.Response(serializer.data)
+
+    @list_route(methods=['get'])
+    def get_trashpoints(self, request, **kwargs):
+        if request.user.is_anonymous:
+            return response.Response(status=400, data={'error': 'User is not logged!'})
+        
+        trahspoints = TrashPoint.objects.all()
+        serializer = self.get_serializer(trahspoints, many=True)
         return response.Response(serializer.data)
