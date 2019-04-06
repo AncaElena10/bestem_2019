@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .viewsets import TestViewSets
+from .viewsets import TestViewSets, TrashPointViewSets
 from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register('app', TestViewSets)
+router.register('trashpoints', TrashPointViewSets)
 
 urlpatterns = [
     path('', include(router.urls))

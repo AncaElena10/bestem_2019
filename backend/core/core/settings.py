@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions',
     'rest_framework', 
     'oauth2_provider',
     'social_django',
@@ -170,3 +169,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'is.it.bug.or.feature@gmail.com'
 EMAIL_HOST_PASSWORD = 'Cocomarla123?'
 
+MEDIA_URL =  '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")

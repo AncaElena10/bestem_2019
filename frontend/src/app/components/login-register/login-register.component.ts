@@ -18,7 +18,7 @@ var FB: any
 })
 export class LoginRegisterComponent implements OnInit {
 
-  email = ""
+  username = ""
   password = ""
   password_confirmation = ""
   firstname = ""
@@ -49,9 +49,12 @@ export class LoginRegisterComponent implements OnInit {
         this.userID = response.authResponse.userID
         this.accessToken = response.authResponse.accessToken
         localStorage.setItem("userID", this.userID)
-        if (response.status === 'connected') {
-          this._router.navigateByUrl('/user-profile');
-        }
+        localStorage.setItem("accessToken", this.accessToken)
+        // if (response.status === 'connected') {
+        //   this._zone.run(() => {
+        //     this._router.navigate(['./user-profile']);
+        //   });
+        // }
       })
       .catch((error: any) => console.error(error));
 
@@ -74,8 +77,11 @@ export class LoginRegisterComponent implements OnInit {
 
   login() {
     this.loginObject = {
-      'email': this.email,
-      'password': this.password
+      'client_id': '9Ekjd1tdFfUeVcwtv5ls4cSC0Urkm8njyMLXZ8LP',
+      'grant_type': 'password',
+      'password': this.password,
+      'username': this.username,
+      'client_secret': 'xR6Ev9u5vo2XFoNNZZ35HkLDEha3U0UhMhaEBNGsyehAGgSMcbbqCIuKSVu21XmrNTrUqeZZjGxHsz0OxvDFjbfHeBm0Iwi26BPuMGzE0VQYetRrfoitcq2ATE2HR9Oc'
     }
 
     // console.log(this.loginObject)
@@ -88,17 +94,16 @@ export class LoginRegisterComponent implements OnInit {
   }
 
   extractUserInfo(res) {
-    localStorage.setItem('id', res.id)
-    localStorage.setItem('email', res.email)
+    localStorage.setItem('userID', 'loggedIn')
+    localStorage.setItem('access_token_alex', res.access_token)
   }
 
   registerAsUser() {
     this.registerUserObject = {
       'firstname': this.firstname,
       'lastname': this.lastname,
-      'email': this.email,
+      'username': this.username,
       'password': this.password,
-      'type': 'user',
     }
 
     // console.log(this.registerUserObject)
@@ -113,13 +118,10 @@ export class LoginRegisterComponent implements OnInit {
     this.registerAdminObject = {
       'firstname': this.firstname,
       'lastname': this.lastname,
-      'email': this.email,
+      'username': this.username,
       'password': this.password,
       'type': 'admin'
     }
-
-    // console.log(this.registerAdminObject)
-
 
     this.apiService.register(this.registerUserObject).subscribe((res) => {
       console.log(res)
@@ -128,7 +130,7 @@ export class LoginRegisterComponent implements OnInit {
   }
 
   emptyFields() {
-    this.email = ""
+    this.username = ""
     this.password = ""
     this.password_confirmation = ""
     this.firstname = ""
