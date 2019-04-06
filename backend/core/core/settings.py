@@ -37,12 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'rest_framework', 
     'oauth2_provider',
     'social_django',
     'rest_framework_social_oauth2',
     'rest_framework.authtoken',
     'app',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -142,9 +144,6 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookAppOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
 
-    # Google OAuth2
-    'social.backends.google.GoogleOAuth2',
-
     # django-rest-framework-social-oauth2
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
 
@@ -163,9 +162,11 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email'
 }
 
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '579252782666-tgpq7l47ou24cadrc11q1v83q636j80n.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'I2lqP5EYijrNJAuXaboUfgvt'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email',]
-
+# Settings for sending an email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'is.it.bug.or.feature@gmail.com'
+EMAIL_HOST_PASSWORD = 'Cocomarla123?'
 
