@@ -37,6 +37,8 @@ class TrashPointViewSets(viewsets.ModelViewSet):
         lng = request.data.get('lng')
         level = request.data.get('level')
         picture = request.data.get('picture')
+
+        print(picture)
         user = request.user
 
         tp = TrashPoint.objects.create(
