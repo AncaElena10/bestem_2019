@@ -162,11 +162,11 @@ class ManageEventViewSets(viewsets.ModelViewSet):
                 return response.Response(status=404)
 
             if trash.pollution_level == TrashPoint.HIGH:
-                total_points += 20
+                total_points += 50
             if trash.pollution_level == TrashPoint.MEDIUM:
-                total_points += 10      
+                total_points += 40      
             if trash.pollution_level == TrashPoint.LOW:
-                total_points += 5
+                total_points += 30
             
             trash.event = event
             trash.save()
@@ -179,8 +179,7 @@ class ManageEventViewSets(viewsets.ModelViewSet):
             pass
 
         subject = "A new event was created"
-        message = """We are happy to inform you that a new event was successfully created by you.
-                   Your proactivity is rewarded with {} points. \n Enjoy it :)!""".format(total_points)
+        message = """Hello!\nWe are happy to inform you that a new event was successfully created by you.\nYour proactivity is rewarded with {} points.\nEnjoy it :)!""".format(total_points)
         
         email(owner.email, subject, message)
         return response.Response(status=200, data={'error': 'Success'})
@@ -193,6 +192,53 @@ class ManageEventViewSets(viewsets.ModelViewSet):
         events = Event.objects.all()
         serializer = self.get_serializer(events, many=True)
         return response.Response(serializer.data)
+
+    @list_route(methods=['post'])
+    def join_event(self, request, **kwargs):
+        if request.user.is_anonymous:
+            return response.Response(status=400, data={'error': 'User is not logged!'})
+        id = request.data.get('id')
+
+        try:
+            event = Event.objects.get(id=id)
+        except:
+            return response.Response(status=404)
+        
+        event.users.add(request.user)
+        event.save()
+
+        total_points = 15
+        try:
+            user.points += total_points
+            user.save()
+        except:
+            pass
+
+        subject = "Event participation"
+        message = """Hello!\nWe are happy to inform you that you successfully joined the event.\nYour interest is rewarded with {} points.\nEnjoy it :)!""".format(total_points)
+        
+        email(owner.email, subject, message)
+
+        return response.Response(serializer.data)
+
+    @list_route(methods=['post'])
+    def close_event(self, request, **kwargs):
+        if request.user.is_anonymous:
+            return response.Response(status=400, data={'error': 'User is not logged!'})
+        id = request.data.get('id')
+
+        try:
+            event = Event.objects.get(id=id)
+        except:
+            return response.Response(status=404)
+        
+        for tp in trashpoint_set.all()
+            tp.active = False
+            tp.save()
+        
+        event.status = Event.COMPLETED
+        event.save()
+        return response.Response(status=200)
 
 def frequencyDistribution(data):
     return {i: data.count(i) for i in data}   
