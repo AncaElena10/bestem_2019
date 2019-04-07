@@ -3,8 +3,8 @@ from app.models import Test, TrashPoint, Event, ExtendedUser
 from .serializers import TestSerializer, TrashPointSerializer, EventSerializer, ManageAccountSerializer
 from rest_framework.decorators import list_route, detail_route
 from django.contrib.auth.models import User, AnonymousUser
-from .views import email
 from rest_framework.parsers import FileUploadParser
+from .helpers import email
 
 class TestViewSets(viewsets.ModelViewSet):
     queryset = Test.objects.all()
@@ -12,8 +12,6 @@ class TestViewSets(viewsets.ModelViewSet):
 
     @list_route(methods=['get'])
     def list_test(self, request, **kwargs):
-        print(request.user)
-        print("ALOOOOO")
         tests = Test.objects.all()
         serializer = self.get_serializer(tests, many=True)
         return response.Response(serializer.data)
@@ -180,9 +178,13 @@ class ManageEventViewSets(viewsets.ModelViewSet):
         except:
             pass
 
+        subject = "A new event was created"
+        message = """We are happy to inform you that a new event was successfully created by you.
+                   Your proactivity is rewarded with {} points. \n Enjoy it :)!""".format(total_points)
+        
+        email(owner.email, subject, message)
         return response.Response(status=200, data={'error': 'Success'})
 
-<<<<<<< HEAD
     @list_route(methods=['get'])
     def list_events(self, request, **kwargs):
         if request.user.is_anonymous:
@@ -191,7 +193,6 @@ class ManageEventViewSets(viewsets.ModelViewSet):
         events = Event.objects.all()
         serializer = self.get_serializer(events, many=True)
         return response.Response(serializer.data)
-=======
 
 def frequencyDistribution(data):
     return {i: data.count(i) for i in data}   
@@ -247,4 +248,3 @@ class ChartsViewSets(viewsets.ModelViewSet):
             'data':freq,
             'total':total})       
             
->>>>>>> alina2
