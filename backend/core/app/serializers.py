@@ -13,9 +13,11 @@ class TrashPointSerializer(serializers.ModelSerializer):
         fields = ('id', 'x_coord', 'y_coord', 'user_id', 'pollution_level', 'active', 'event', 'picture')
 
 class ManageAccountSerializer(serializers.ModelSerializer):
+    role = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'password', 'first_name', 'last_name') 
+        fields = ('id', 'email', 'username', 'password', 'first_name', 'last_name', 'role') 
 
     read_only_fields = (
         'role'
@@ -23,12 +25,14 @@ class ManageAccountSerializer(serializers.ModelSerializer):
 
     def get_role(self, obj):
         try:
-            user = ExtendedUser.objects.get(user_id=obj.id)
+            user = ExtendedUser.objects.get(user=obj)
         except:
             return None
         return user.role 
 
 class EventSerializer(serializers.ModelSerializer):
+    total_people = serializers.SerializerMethodField()
+
     class Meta:
         model = Event
         fields = '__all__'
