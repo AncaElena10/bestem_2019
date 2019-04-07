@@ -91,7 +91,7 @@ class ManageAccountViewSets(viewsets.ModelViewSet):
             return response.Response(status=400, data={'error': 'User is not logged!'})
         
         try:
-            user = ExtendedUser.objects.get(user_id=request.user.id)
+            user = ExtendedUser.objects.get(user=request.user)
         except:
             return response.Response(status=200, data={'points': None})
         return response.Response(status=200, data={'points': user.points})
@@ -111,7 +111,7 @@ class ManageAccountViewSets(viewsets.ModelViewSet):
         except User.DoesNotExist:
             return response.Response(status=404, data={'error': 'User does not exist'})
         try:
-            extendedUser = ExtendedUser.objects.get(user_id=user.id)
+            extendedUser = ExtendedUser.objects.get(user=user)
         except User.DoesNotExist:
             return response.Response(status=404, data={'error': 'Except User does not exist'})  
 
@@ -172,7 +172,7 @@ class ManageEventViewSets(viewsets.ModelViewSet):
             trash.save()
 
         try:
-            user = ExtendedUser.objects.get(user_id=owner.id)
+            user = ExtendedUser.objects.get(user=owner)
             user.points += total_points
             user.save()
         except:
@@ -209,7 +209,7 @@ class ManageEventViewSets(viewsets.ModelViewSet):
 
         total_points = 15
         try:
-            user = ExtendedUser.objects.get(user_id=request.user.id)
+            user = ExtendedUser.objects.get(user=request.user)
             user.points += total_points
             user.save()
         except:

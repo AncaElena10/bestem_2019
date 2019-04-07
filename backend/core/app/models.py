@@ -59,7 +59,7 @@ class ExtendedUser(models.Model):
         (ADMIN, "Admin"),
     )
 
-    user_id = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     phone = models.CharField(max_length=20)
     points = models.IntegerField(default=0)
     role =  models.CharField(max_length=50, choices=ROLE, null=False, blank=False)

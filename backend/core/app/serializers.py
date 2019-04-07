@@ -23,7 +23,7 @@ class ManageAccountSerializer(serializers.ModelSerializer):
 
     def get_role(self, obj):
         try:
-            user = ExtendedUser.objects.get(user_id=obj.id)
+            user = ExtendedUser.objects.get(user=obj)
         except:
             return None
         return user.role 

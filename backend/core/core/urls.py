@@ -25,3 +25,7 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+admin.site.site_header = "Site administration"
+admin.site.site_title = "Admin App"
+admin.site.index_title = "Welcome"
