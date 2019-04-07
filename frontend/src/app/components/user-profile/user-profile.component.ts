@@ -267,27 +267,4 @@ export class UserProfileComponent implements OnInit {
   }
 
   obj
-
-  checkMarkersInBounds(bounds) {
-    this.bounds_ = bounds
-    this.obj = {
-      'latA': bounds.ma.j,
-      'latC': bounds.ma.l,
-      'longB': bounds.ga.j,
-      'longD': bounds.ga.l,
-    }
-  }
-
-  share() {
-    const options: UIParams = {
-      method: 'share',
-      href: 'https://www.facebook.com/UnusualAnimalsGY/photos/basw.AbqEBIk0SetpzMUMYOMPxOMNLYH2_KOfSFO8MuWApKmIcFd-D6UtLVAH5fGPL5QoQ_tZopi0l1jPzuzQPlnyn1XlF1sqjnZ8w5aOno2m-4yeSkZNcBjO7WZflFAmsjeLdg4ymToejsCJw4OqRHicSVc1.650285995430912.2297307886967395.373391796586885.2831229810283840.589890468176362.842151259470490/650285995430912/?type=1&opaqueCursor=Abob75r1SmPmbvCDL6dO8BsRsQhfKoTdcQoIdB_1RfBLJoFw1oqXZzc2WdKNWod7zTzNMewedxPKxBEt8NLJl1uIxBe5blNXCDcrZ-q9-eG5b7F54srjfXEAuOkNCKYix8LhT_7IZ4odwPGljvZnfPgUlDEo2HF74I51rX0TMR7VfHdmDbWfuKomHTf51Z_UcGexGSUANS-zv14OboHUwJXAsd2PtpEVKuevrbCkEHmEEGOKWxY72XhcFK1j_MwQA5XHGCuGe5Q4cMf7H8Gd2cFiRTqA5uwRY97s05dDvM29Uywij-niEjxhcSVDUhH1QcODly4VsvRr5NktkyS9uudhHatvnn0V9jndcRyhHBTwrxe3IisBDWveg9EQqdhD2w0ppJco6OOEW4ugZjtGaQ_deagC_3Rk5tnNoF-zwKy-l9hlC_4XLHd9TjlJ12VYED842nM8932QlNlVgweH59jmDN0yu6YbBqAABqPDWKxt2cKJLJowWiAAsKg_-l0q0c-5hvdM-qu-fSrzegOTmd3dpOaYHf5U9TuByVYq60NePo5gzr5kSgUg049hd4FDVdETkgsz3gvyp2QGPVA07dRYHL-pgP_ljcy2eqbTkSEyZ8p115Yt20kRT_8tzbf1DZ3QpxUZ-L0qVu4zRQhPhOLm9qJM_VvbqYf448mDfJMppR2Rr1BZ5ry6x-7rDZoT3b0H7AQ_c8T2ABkTVvovBODjwRNziEcbd2kkhLw2A4ldjFL7Fqemp_Nv14vcfBMQKfABlG4Z9DokWVtVSmq_-Qwc&theater'
-    };
-
-    this.fb.ui(options)
-      .then((res: UIResponse) => {
-        console.log('Got the users profile', res);
-      })
-      .catch((error: any) => console.error(error));
-  }
 }

@@ -32,8 +32,7 @@
       <div class="col-lg-12">
         <div class="single-about-box">
           <agm-map #map_ [latitude]="lat" [longitude]="lng" [scrollwheel]="true" [zoom]="zoom"
-            [fullscreenControl]="true" (mapClick)="locateTrash($event)" (mapReady)="mapReady($event)"
-            (boundsChange)="checkMarkersInBounds($event)">
+            [fullscreenControl]="true" (mapClick)="locateTrash($event)" (mapReady)="mapReady($event)">
             <agm-marker [latitude]="lat" [longitude]="lng" [iconUrl]="currentIcon" [animation]="'BOUNCE'"></agm-marker>
             <agm-info-window [disableAutoPan]="true" [latitude]="lat" [longitude]="lng">
               Current Location
@@ -92,9 +91,9 @@
               (click)="doneEvent()">DONE</button> if you
             finished adding a new event.</h3>
 
-          <button (click)="share()" class="btn btn-lg btn-primary btn-block">
+          <!-- <button (click)="share()" class="btn btn-lg btn-primary btn-block">
             Share dialog
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
