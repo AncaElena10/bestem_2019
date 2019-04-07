@@ -239,7 +239,7 @@ class ManageEventViewSets(viewsets.ModelViewSet):
         
         event.status = Event.COMPLETED
         event.save()
-        return response.Response(status=200, data={'error': 'Inactive'})
+        return response.Response(status=200)
 
 def frequencyDistribution(data):
     return {i: data.count(i) for i in data}   

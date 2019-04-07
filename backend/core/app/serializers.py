@@ -27,4 +27,4 @@ class EventSerializer(serializers.ModelSerializer):
     )
     
     def get_total_people(self, obj):
-        return len(obj.users) + 1
+        return obj.users.count() + 1
