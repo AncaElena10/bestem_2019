@@ -3,8 +3,8 @@ from app.models import Test, TrashPoint, Event, ExtendedUser
 from .serializers import TestSerializer, TrashPointSerializer, EventSerializer, ManageAccountSerializer
 from rest_framework.decorators import list_route, detail_route
 from django.contrib.auth.models import User, AnonymousUser
-from .views import email
 from rest_framework.parsers import FileUploadParser
+from .helpers import email
 
 class TestViewSets(viewsets.ModelViewSet):
     queryset = Test.objects.all()
@@ -12,8 +12,6 @@ class TestViewSets(viewsets.ModelViewSet):
 
     @list_route(methods=['get'])
     def list_test(self, request, **kwargs):
-        print(request.user)
-        print("ALOOOOO")
         tests = Test.objects.all()
         serializer = self.get_serializer(tests, many=True)
         return response.Response(serializer.data)
@@ -104,6 +102,30 @@ class ManageAccountViewSets(viewsets.ModelViewSet):
             return response.Response(status=400, data={'error': 'User is not logged!'})
         serializer = self.get_serializer(request.user)
         return response.Response(serializer.data)
+        
+    @list_route(methods=['post'])
+    def gamification(self, request, **kwargs):
+        username = request.data.get('username')
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return response.Response(status=404, data={'error': 'User does not exist'})
+        try:
+            extendedUser = ExtendedUser.objects.get(user_id=user.id)
+        except User.DoesNotExist:
+            return response.Response(status=404, data={'error': 'Except User does not exist'})  
+
+        points = extendedUser.points
+        number_events_created = Event.objects.filter(owner=user).count()
+        number_events_participated = Event.objects.filter(users__username=username).count()
+        number_places_reported = TrashPoint.objects.filter(user=user).count()
+        return response.Response(status=200, data={
+            'username':username,
+            'points':points,
+            'number_events_created':number_events_created,
+            'number_events_participated':number_events_participated,
+            'number_places_reported':number_places_reported
+            })
 
 
 class ManageEventViewSets(viewsets.ModelViewSet):
@@ -140,11 +162,11 @@ class ManageEventViewSets(viewsets.ModelViewSet):
                 return response.Response(status=404)
 
             if trash.pollution_level == TrashPoint.HIGH:
-                total_points += 20
+                total_points += 50
             if trash.pollution_level == TrashPoint.MEDIUM:
-                total_points += 10      
+                total_points += 40      
             if trash.pollution_level == TrashPoint.LOW:
-                total_points += 5
+                total_points += 30
             
             trash.event = event
             trash.save()
@@ -156,6 +178,10 @@ class ManageEventViewSets(viewsets.ModelViewSet):
         except:
             pass
 
+        subject = "A new event was created"
+        message = """Hello!\nWe are happy to inform you that a new event was successfully created by you.\nYour proactivity is rewarded with {} points.\nEnjoy it :)!""".format(total_points)
+        
+        email(owner.email, subject, message)
         return response.Response(status=200, data={'error': 'Success'})
 
     @list_route(methods=['get'])
@@ -166,3 +192,106 @@ class ManageEventViewSets(viewsets.ModelViewSet):
         events = Event.objects.all()
         serializer = self.get_serializer(events, many=True)
         return response.Response(serializer.data)
+
+    @list_route(methods=['post'])
+    def join_event(self, request, **kwargs):
+        if request.user.is_anonymous:
+            return response.Response(status=400, data={'error': 'User is not logged!'})
+        id = request.data.get('id')
+
+        try:
+            event = Event.objects.get(id=id)
+        except:
+            return response.Response(status=404)
+        
+        event.users.add(request.user)
+        event.save()
+
+        total_points = 15
+        try:
+            user = ExtendedUser.objects.get(user_id=request.user.id)
+            user.points += total_points
+            user.save()
+        except:
+            pass
+
+        subject = "Event participation"
+        message = """Hello!\nWe are happy to inform you that you successfully joined the event.\nYour interest is rewarded with {} points.\nEnjoy it :)!""".format(total_points)
+        
+        email(request.user.email, subject, message)
+
+        return response.Response(status=200)
+
+    @list_route(methods=['post'])
+    def close_event(self, request, **kwargs):
+        if request.user.is_anonymous:
+            return response.Response(status=400, data={'error': 'User is not logged!'})
+        id = request.data.get('id')
+
+        try:
+            event = Event.objects.get(id=id)
+        except:
+            return response.Response(status=404)
+        
+        for tp in event.trashpoint_set.all():
+            tp.active = False
+            tp.save()
+        
+        event.status = Event.COMPLETED
+        event.save()
+        return response.Response(status=200)
+
+def frequencyDistribution(data):
+    return {i: data.count(i) for i in data}   
+
+class ChartsViewSets(viewsets.ModelViewSet):
+    queryset = TrashPoint.objects.all()
+    serializer_class = TrashPointSerializer
+    
+    @list_route(methods=['post'])
+    def trash_clean(self, request, **kwargs):
+        total = TrashPoint.objects.count()
+        clean = TrashPoint.objects.filter(active=False).count()
+        dirty = total - clean
+        return response.Response(status=200, data={
+            'clean':clean,
+            'dirty':dirty,
+            'total':total})
+
+    @list_route(methods=['post'])
+    def trash_level(self, request, **kwargs):
+        total = TrashPoint.objects.count()
+        low = TrashPoint.objects.filter(pollution_level=TrashPoint.LOW).count()
+        medium = TrashPoint.objects.filter(pollution_level=TrashPoint.MEDIUM).count()
+        high = TrashPoint.objects.filter(pollution_level=TrashPoint.HIGH).count()
+        return response.Response(status=200, data={
+            'low':low,
+            'medium':medium,
+            'high':high,
+            'total':total})    
+
+    @list_route(methods=['post'])
+    def event_people(self, request, **kwargs):
+        total = Event.objects.count()
+        events = Event.objects.all()
+        list_people = []
+        for event in events:
+            list_people.append(event.users.count())
+        freq = frequencyDistribution(list_people)
+        return response.Response(status=200, data={
+            'data':freq,
+            'total':total})       
+
+    @list_route(methods=['post'])
+    def event_places(self, request, **kwargs):
+        total = Event.objects.count()
+        list_places = []
+        events = Event.objects.all()
+        for event in events:
+            number_places = TrashPoint.objects.filter(event=event).count()
+            list_places.append(number_places)
+        freq = frequencyDistribution(list_places)
+        return response.Response(status=200, data={
+            'data':freq,
+            'total':total})       
+            

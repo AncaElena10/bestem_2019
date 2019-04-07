@@ -1,13 +1,3 @@
 from django.shortcuts import render
 
-# For sending an email
-from django.core.mail import send_mail
-from django.conf import settings
-
-def email(recipient, subject, message):
-    email_from = settings.EMAIL_HOST_USER
-    recipient_list = [recipient,]
-    send_mail( subject, message, email_from, recipient_list )
-
-
 # Create your views here.
