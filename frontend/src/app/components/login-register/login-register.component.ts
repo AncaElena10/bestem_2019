@@ -129,7 +129,7 @@ export class LoginRegisterComponent implements OnInit {
 
     this.apiService.register(this.registerUserObject).subscribe((res) => {
       console.log(res)
-      localStorage.setItem("role", this.role)
+      // localStorage.setItem("role", this.role)
       window.location.reload()
     })
   }
