@@ -35,7 +35,7 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'charts',
+    path: 'info',
     component: MyChrtsComponent,
     pathMatch: 'full',
   },
