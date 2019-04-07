@@ -22,7 +22,7 @@ export class UserProfileComponent implements OnInit {
 
   lat: Number
   lng: Number
-  zoom: Number
+  zoom: Number = 14
 
   poluation_level = ['Select level', 'Low', 'Medium', 'High']
   selectedLevel = this.poluation_level[0];
@@ -68,12 +68,13 @@ export class UserProfileComponent implements OnInit {
       this.extractTrashMarkers(res)
     })
 
+    var self = this
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
-        this.lat = position.coords.latitude
-        this.lng = position.coords.longitude
-        this.zoom = 14;
-        this.currentIcon = {
+        self.lat = position.coords.latitude
+        self.lng = position.coords.longitude
+        // this.zoom = 10;
+        self.currentIcon = {
           url: require("./icons/current.png"),
           scaledSize: {
             width: 60,
