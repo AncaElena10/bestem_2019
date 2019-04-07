@@ -22,7 +22,16 @@
       <div class="col-lg-12">
         <div class="sec-title">
           <h2>Charts<span class="sec-title-border"><span></span><span></span><span></span></span></h2>
-          <!-- pune aici charturile -->
+          <div id="chart">
+            <google-chart [title]="piechart.title" [type]="piechart.type" [data]="piechart.data"
+              [columnNames]="piechart.columnNames" [options]="piechart.options">
+            </google-chart>
+          </div>
+          <div id="chart">
+            <google-chart [title]="barchart.title" [type]="barchart.type" [data]="barchart.data"
+              [columnNames]="barchart.columnNames" [options]="barchart.options">
+            </google-chart>
+          </div>
         </div>
       </div>
     </div>
