@@ -232,7 +232,7 @@ class ManageEventViewSets(viewsets.ModelViewSet):
         except:
             return response.Response(status=404)
         
-        for tp in trashpoint_set.all()
+        for tp in event.trashpoint_set.all()
             tp.active = False
             tp.save()
         
