@@ -29,6 +29,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { GoogleChartsModule } from 'angular-google-charts';
 
 
 import {
@@ -87,7 +88,8 @@ export function getAuthServiceConfigs() {
       useFactory: adapterFactory
     }),
     NgbModalModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    GoogleChartsModule.forRoot()
   ],
   providers: [
     {

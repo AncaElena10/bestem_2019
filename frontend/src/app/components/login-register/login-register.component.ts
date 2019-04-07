@@ -103,6 +103,8 @@ export class LoginRegisterComponent implements OnInit {
     localStorage.setItem('userID_nr', res.id)
     localStorage.setItem('first_name', res.first_name)
     localStorage.setItem('last_name', res.last_name)
+    localStorage.setItem('username', res.username)
+    localStorage.setItem('role', res.role)
   }
 
   extractUserInfo(res) {

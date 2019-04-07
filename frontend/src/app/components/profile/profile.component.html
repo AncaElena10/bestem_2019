@@ -3,8 +3,8 @@
     <div class="row">
       <div class="col-lg-7">
         <div class="hero-area-content">
-          <h1>Hello, there!</h1>
-          <p>This is your profile.</p>
+          <h1>Hello, there, {{ first_name }}!</h1>
+          <p>It's good to see your here. Below you will find some details about your activity.</p>
         </div>
       </div>
       <div class="col-lg-5">
@@ -22,9 +22,35 @@
       <div class="col-lg-12">
         <div class="sec-title">
           <h2>Your points<span class="sec-title-border"><span></span><span></span><span></span></span></h2>
-
+          <h1>{{ gameList.points }}</h1>
+          <img [src]="'http://media.lpgenerator.ru/images/109851/medal.png'" width="30%" height="30%">
+          <p>Congrats! You achieved your first bagde! Continue earning points and you will discover new badges.</p>
         </div>
       </div>
     </div>
   </div>
 </section><!-- about section end -->
+<section class="counter-area ptb-90">
+  <div class="container">
+    <div class="row flexbox-center">
+      <div class="col-lg-4">
+        <div class="single-counter-box">
+          <h3><span class="counter">Number of events created by you:</span></h3>
+          <h1>{{ gameList.number_events_created }}</h1>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="single-counter-box">
+          <h3><span class="counter">Number of events when you participated:</span></h3>
+          <h1>{{ gameList.number_events_participated }}</h1>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="single-counter-box">
+          <h3><span class="counter">Number of places reported by you:</span></h3>
+          <h1>{{ gameList.number_places_reported }}</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

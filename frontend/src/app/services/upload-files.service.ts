@@ -42,11 +42,18 @@ export class UploadFilesService {
   }
 
   getAllChestii() {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': "Bearer " + localStorage.getItem('access_token_alex')
-    })
-    return this.http.get('http://40.121.66.13:8080/api/events/list_events/', { headers: headers })
+    var empty = ""
+    return this.http.post('http://40.121.66.13:8080/api/charts/trash_clean/', empty)
+  }
+
+  getAllLevels() {
+    var empty = ""
+    return this.http.post('http://40.121.66.13:8080/api/charts/trash_level/', empty)
+  }
+
+  getEventPart() {
+    var empty = ""
+    return this.http.post('http://40.121.66.13:8080/api/charts/event_places/', empty)
   }
 
   joinEvent(object) {

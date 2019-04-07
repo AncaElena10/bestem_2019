@@ -27,4 +27,8 @@ export class ApiService {
     })
     return this.http.get("http://40.121.66.13:8080/api/user/get_user_info/", { headers: headers })
   }
+
+  getGamification(object) {
+    return this.http.post("http://40.121.66.13:8080/api/user/gamification/", object)
+  }
 }
