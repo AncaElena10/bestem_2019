@@ -209,6 +209,7 @@ class ManageEventViewSets(viewsets.ModelViewSet):
 
         total_points = 15
         try:
+            user = ExtendedUser.objects.get(user_id=request.user.id)
             user.points += total_points
             user.save()
         except:
@@ -217,7 +218,7 @@ class ManageEventViewSets(viewsets.ModelViewSet):
         subject = "Event participation"
         message = """Hello!\nWe are happy to inform you that you successfully joined the event.\nYour interest is rewarded with {} points.\nEnjoy it :)!""".format(total_points)
         
-        email(owner.email, subject, message)
+        email(request.user.email, subject, message)
 
         return response.Response(serializer.data)
 
@@ -238,7 +239,7 @@ class ManageEventViewSets(viewsets.ModelViewSet):
         
         event.status = Event.COMPLETED
         event.save()
-        return response.Response(status=200)
+        return response.Response(status=200, data={'error': 'Inactive'})
 
 def frequencyDistribution(data):
     return {i: data.count(i) for i in data}   
