@@ -30,6 +30,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
+
 import {
   SocialLoginModule,
   AuthServiceConfig,
@@ -38,6 +39,7 @@ import {
 } from "angular-6-social-login";
 import { MyCalendarComponent } from './components/my-calendar/my-calendar.component';
 import { MyChrtsComponent } from './components/my-chrts/my-chrts.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -61,6 +63,7 @@ export function getAuthServiceConfigs() {
     UserProfileComponent,
     MyCalendarComponent,
     MyChrtsComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

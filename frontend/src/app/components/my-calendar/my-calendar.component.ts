@@ -146,10 +146,6 @@ export class MyCalendarComponent implements OnInit {
     ];
   }
 
-  deleteEvent(eventToDelete: CalendarEvent) {
-    this.events = this.events.filter(event => event !== eventToDelete);
-  }
-
   setView(view: CalendarView) {
     this.view = view;
   }
@@ -167,36 +163,105 @@ export class MyCalendarComponent implements OnInit {
   }
 
   description = []
+  description2 = []
   descs = []
+  descs2 = []
+
+  myEvents = []
+  otherEvents = []
+
+  idsList = []
 
   extractAllEvents(res) {
     this.eventsList = res
 
+    console.log(this.eventsList)
+
     for (let i = 0; i < this.eventsList.length; i++) {
+      // this.idsList.push(this.eventsList[i].users)
+      if (this.eventsList[i].users.includes(Number(localStorage.getItem('userID_nr')))) {
+        // console.log(this.eventsList[i])
+        this.eventsList[i].isMine = true
+      } else {
+        this.eventsList[i].isMine = false
+      }
       this.events.push({
         start: new Date(this.eventsList[i].date),
         end: new Date(this.eventsList[i].date),
-        title: this.eventsList[i].name + '+' + this.eventsList[i].extra,
+        title: this.eventsList[i].name + '-' + this.eventsList[i].extra,
         color: colors.red,
         actions: this.actions,
         allDay: true
       })
+      if (this.eventsList[i].owner.toString() == localStorage.getItem('userID_nr')) {
+        this.myEvents.push({
+          start: new Date(this.eventsList[i].date),
+          end: new Date(this.eventsList[i].date),
+          title: this.eventsList[i].name + '+' + this.eventsList[i].extra + "+" + this.eventsList[i].address + "+" + this.eventsList[i].id + "+" + this.eventsList[i].status,
+          color: colors.red,
+          actions: this.actions,
+          allDay: true
+        })
+      } else if (this.eventsList[i].owner.toString() != localStorage.getItem('userID_nr')) {
+        this.otherEvents.push({
+          start: new Date(this.eventsList[i].date),
+          end: new Date(this.eventsList[i].date),
+          title: this.eventsList[i].name + '+' + this.eventsList[i].extra + "+" + this.eventsList[i].address + "+" + this.eventsList[i].id + "+" + this.eventsList[i].isMine,
+          color: colors.red,
+          actions: this.actions,
+          allDay: true
+        })
+      }
     }
 
-    for (let i = 0; i < this.events.length; i++) {
-      this.description.push(this.events[i].title)
+    for (let i = 0; i < this.myEvents.length; i++) {
+      this.description.push(this.myEvents[i].title)
     }
 
-    for (let i = 0; i < this.events.length; i++) {
+    for (let i = 0; i < this.otherEvents.length; i++) {
+      this.description2.push(this.otherEvents[i].title)
+    }
+
+    for (let i = 0; i < this.myEvents.length; i++) {
       this.descs.push({
         'title': this.description[i].split('+'),
-        start: new Date(this.eventsList[i].date),
-        end: new Date(this.eventsList[i].date),
+        start: new Date(this.myEvents[i].start),
+        end: new Date(this.myEvents[i].end),
         color: colors.red,
         actions: this.actions,
         allDay: true
       })
     }
+
+    for (let i = 0; i < this.otherEvents.length; i++) {
+      this.descs2.push({
+        'title': this.description2[i].split('+'),
+        start: new Date(this.otherEvents[i].start),
+        end: new Date(this.otherEvents[i].end),
+        color: colors.red,
+        actions: this.actions,
+        allDay: true
+      })
+    }
+
+    console.log(this.descs2)
   }
 
+  id
+
+  joinEvent(id) {
+    this.id = {
+      'id': id
+    }
+    this.fileUploadService.joinEvent(this.id).subscribe((res) => {
+    })
+  }
+
+  closeEvent(id) {
+    this.id = {
+      'id': id
+    }
+    this.fileUploadService.closeEvent(this.id).subscribe((res) => {
+    })
+  }
 }

@@ -10,12 +10,11 @@
           <div class="responsive-menu"></div>
           <div class="mainmenu">
             <ul id="primary-menu">
-              <li><a class="nav-link active" href="#home">Home</a></li>
-              <li><a class="nav-link" href="#feature">Feature</a></li>
-              <li><a class="nav-link" href="#screenshot">Screenshot</a></li>
-              <li><a class="nav-link" href="#pricing">Pricing</a></li>
-              <li><a class="nav-link" href="#team">Team</a></li>
-              <li><a class="nav-link" href="#blog">Blog</a></li>
+              <li><a class="nav-link active" routerLink="/home">Home</a></li>
+              <li><a class="nav-link" routerLink="/user-profile">Map Events</a></li>
+              <li><a class="nav-link" routerLink="/calendar">Calendar</a></li>
+              <li><a class="nav-link" routerLink="/charts">Charts</a></li>
+              <li><a class="nav-link" routerLink="/profile">Profile</a></li>
               <li *ngIf="userID == null"><a class="appao-btn" data-toggle="modal" data-target="#login_modal">Log in</a>
               </li>
               <li *ngIf="fbLogin && !normalLogin">
@@ -28,7 +27,7 @@
               </li>
               <li *ngIf="!fbLogin && normalLogin">
                 <div class="profile_pic">
-                  <ngx-avatar name="John Doe"></ngx-avatar>
+                  <ngx-avatar name="{{full_name}}"></ngx-avatar>
                   <a class="appao-btn" data-toggle="modal" data-target="#logout_modal">Log
                     out
                   </a>

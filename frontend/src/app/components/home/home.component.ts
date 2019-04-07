@@ -22,23 +22,23 @@ export class HomeComponent implements OnInit {
     this.accessToken = localStorage.getItem("accessToken")
     // this.userType = localStorage.getItem("userType")
 
-    if (this.userID != null && this.userType == null) {
-      let el: HTMLElement = this.triggerButton.nativeElement as HTMLElement;
-      el.click();
-    }
+    // if (this.userID != null && this.userType == null) {
+    //   let el: HTMLElement = this.triggerButton.nativeElement as HTMLElement;
+    //   el.click();
+    // }
   }
 
-  chooseVolunteer() {
-    this.userType = "volunteer"
-    // localStorage.setItem("userType", this.userType)
+  // chooseVolunteer() {
+  //   this.userType = "volunteer"
+  //   // localStorage.setItem("userType", this.userType)
 
-    this._router.navigateByUrl('/user-profile');
-  }
+  //   this._router.navigateByUrl('/user-profile');
+  // }
 
-  chooseCollector() {
-    this.userType = "collector"
-    // localStorage.setItem("userType", this.userType)
+  // chooseCollector() {
+  //   this.userType = "collector"
+  //   // localStorage.setItem("userType", this.userType)
 
-    this._router.navigateByUrl('/user-profile');
-  }
+  //   this._router.navigateByUrl('/user-profile');
+  // }
 }

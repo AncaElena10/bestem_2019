@@ -48,4 +48,20 @@ export class UploadFilesService {
     })
     return this.http.get('http://40.121.66.13:8080/api/events/list_events/', { headers: headers })
   }
+
+  joinEvent(object) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': "Bearer " + localStorage.getItem('access_token_alex')
+    })
+    return this.http.post("http://40.121.66.13:8080/api/events/join_event/", object, { headers: headers })
+  }
+
+  closeEvent(object) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': "Bearer " + localStorage.getItem('access_token_alex')
+    })
+    return this.http.post("http://40.121.66.13:8080/api/events/close_event/", object, { headers: headers })
+  }
 }

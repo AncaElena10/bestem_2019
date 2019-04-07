@@ -77,7 +77,13 @@
                   <input class="form-control" type="text" placeholder="Last Name" name="lastname" autocomplete="off"
                     [(ngModel)]="lastname">
                 </div>
+                <div class="col">
+                  <input class="form-control" type="text" placeholder="E-mail" name="email" autocomplete="off"
+                    [(ngModel)]="email">
+                </div>
               </div>
+              <input class="form-control" type="text" placeholder="Phone" name="phone" autocomplete="off"
+                [(ngModel)]="phone">
               <input class="form-control" type="text" placeholder="Username" name="username" autocomplete="off"
                 [(ngModel)]="username">
               <input class="form-control" type="password" placeholder="Password" name="password" autocomplete="off"
@@ -86,6 +92,14 @@
               <input class="form-control" type="password" placeholder="Repeat Password" name="password_confirmation"
                 autocomplete="off" [(ngModel)]="password_confirmation" (keyup)="onPasswordConfirmEnter($event)"
                 [ngStyle]="{'background-color':passwordError == false ? '#d7ffd1' : '#ffd1d1' }">
+              <h3>What are you?</h3>
+              <p><b>Volunteers</b> are able to recycle.</p>
+              <p><b>Collectors</b> support waste management/recycling (NGOs, business institutions)</p>
+              <a class="appao-btn" (click)="chooseVolunteer($event)">Volunteer</a>
+              <a class="appao-btn" (click)="chooseCollector($event)">Collector</a>
+              <p>Your choice: {{ role }}</p>
+
+
               <input class="btn btn-default btn-login" type="button" value="Create account" name="commit"
                 (click)="registerAsUser()">
             </div>

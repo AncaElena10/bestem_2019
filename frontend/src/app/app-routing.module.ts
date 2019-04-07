@@ -6,6 +6,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { LoginRegisterComponent } from './components/login-register/login-register.component';
 import { MyCalendarComponent } from './components/my-calendar/my-calendar.component';
 import { MyChrtsComponent } from './components/my-chrts/my-chrts.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,11 @@ const routes: Routes = [
   {
     path: 'charts',
     component: MyChrtsComponent,
+    pathMatch: 'full',
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
     pathMatch: 'full',
   },
 ]

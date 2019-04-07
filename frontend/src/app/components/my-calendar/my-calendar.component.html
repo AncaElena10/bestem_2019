@@ -96,27 +96,75 @@
       <div class="col-lg-12">
         <div class="single-counter-box">
           <h1><span class="counter">Edit your events</span></h1>
-          <button class="btn btn-primary pull-right" (click)="addEvent()">
-            Add new
-          </button>
           <div class="clearfix"></div>
-
           <div class="table-responsive">
             <table class="table table-bordered">
               <thead>
                 <tr>
                   <th>Title</th>
                   <th>Description</th>
-                  <th>Primary color</th>
-                  <th>Secondary color</th>
+                  <th>Address</th>
                   <th>Starts at</th>
                   <th>Ends at</th>
-                  <th>Remove</th>
+                  <th>Status</th>
+                  <th>Close</th>
+                </tr>
+              </thead>
+
+              <tr *ngFor="let event of descs">
+                <td>
+                  <textarea class="form-control" rows="3" [(ngModel)]="event.title[0]" (keyup)="refresh.next()"
+                    [disabled]="true"></textarea>
+                </td>
+                <td>
+                  <textarea class="form-control" rows="3" [(ngModel)]="event.title[1]" (keyup)="refresh.next()"
+                    [disabled]="true"></textarea>
+                </td>
+                <td>
+                  <textarea class="form-control" rows="3" [(ngModel)]="event.title[2]" (keyup)="refresh.next()"
+                    [disabled]="true"></textarea>
+                </td>
+                <td>
+                  <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="event.start"
+                    (ngModelChange)="refresh.next()" [altInput]="true" [convertModelValue]="true" [enableTime]="true"
+                    dateFormat="Y-m-dTH:i" altFormat="F j, Y H:i" placeholder="Not set" [disabled]="true" />
+                </td>
+                <td>
+                  <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="event.end"
+                    (ngModelChange)="refresh.next()" [altInput]="true" [convertModelValue]="true" [enableTime]="true"
+                    dateFormat="Y-m-dTH:i" altFormat="F j, Y H:i" placeholder="Not set" [disabled]="true" />
+                </td>
+                <td>
+                  <input class="form-control" type="text" [(ngModel)]="event.title[4]" [disabled]="true" />
+                </td>
+                <td>
+                  <button class="btn btn-danger" (click)="closeEvent(event.title[3])"
+                    [disabled]="event.title[4] == 'Completed'">
+                    Close event
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <!--  -->
+          <div class="clearfix"></div>
+          <h1><span class="counter">Other events</span></h1>
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Address</th>
+                  <th>Starts at</th>
+                  <th>Ends at</th>
+                  <th>Join</th>
                 </tr>
               </thead>
 
               <tbody id="_bodyyy">
-                <tr *ngFor="let event of descs">
+                <tr *ngFor="let event of descs2">
                   <td>
                     <textarea class="form-control" rows="3" [(ngModel)]="event.title[0]" (keyup)="refresh.next()"
                       [disabled]="true"></textarea>
@@ -126,10 +174,8 @@
                       [disabled]="true"></textarea>
                   </td>
                   <td>
-                    <input type="color" [(ngModel)]="event.color.primary" (change)="refresh.next()" />
-                  </td>
-                  <td>
-                    <input type="color" [(ngModel)]="event.color.secondary" (change)="refresh.next()" />
+                    <textarea class="form-control" rows="3" [(ngModel)]="event.title[2]" (keyup)="refresh.next()"
+                      [disabled]="true"></textarea>
                   </td>
                   <td>
                     <input class="form-control" type="text" mwlFlatpickr [(ngModel)]="event.start"
@@ -142,14 +188,15 @@
                       dateFormat="Y-m-dTH:i" altFormat="F j, Y H:i" placeholder="Not set" [disabled]="true" />
                   </td>
                   <td>
-                    <button class="btn btn-danger" (click)="deleteEvent(event)">
-                      Delete
+                    <button class="btn btn-danger" (click)="joinEvent(event.title[3])" [disabled]="event.title[4]">
+                      Join this event
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
+          <!--  -->
         </div>
       </div>
     </div>

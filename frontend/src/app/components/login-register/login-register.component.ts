@@ -23,6 +23,9 @@ export class LoginRegisterComponent implements OnInit {
   password_confirmation = ""
   firstname = ""
   lastname = ""
+  email = ""
+  phone = ""
+  role = ""
 
   loginObject = {}
   registerUserObject = {}
@@ -87,10 +90,19 @@ export class LoginRegisterComponent implements OnInit {
     // console.log(this.loginObject)
 
     this.apiService.login(this.loginObject).subscribe((res) => {
-      console.log(res)
       this.extractUserInfo(res)
-      window.location.reload()
+
+      this.apiService.getUserInfo().subscribe((res2) => {
+        this.extractCurrentUserInfo(res2)
+        window.location.reload()
+      })
     })
+  }
+
+  extractCurrentUserInfo(res) {
+    localStorage.setItem('userID_nr', res.id)
+    localStorage.setItem('first_name', res.first_name)
+    localStorage.setItem('last_name', res.last_name)
   }
 
   extractUserInfo(res) {
@@ -100,18 +112,32 @@ export class LoginRegisterComponent implements OnInit {
 
   registerAsUser() {
     this.registerUserObject = {
-      'firstname': this.firstname,
-      'lastname': this.lastname,
+      'firstName': this.firstname,
+      'lastName': this.lastname,
       'username': this.username,
       'password': this.password,
+      'type': 'admin',
+      'email': this.email,
+      'phone': this.phone,
+      'role': this.role
     }
 
-    // console.log(this.registerUserObject)
+
+    console.log(this.registerUserObject)
 
     this.apiService.register(this.registerUserObject).subscribe((res) => {
       console.log(res)
-      // window.location.reload()
+      localStorage.setItem("role", this.role)
+      window.location.reload()
     })
+  }
+
+  chooseVolunteer() {
+    this.role = "Volunteer"
+  }
+
+  chooseCollector() {
+    this.role = "Collector"
   }
 
   registerAsAdmin() {

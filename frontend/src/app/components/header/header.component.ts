@@ -12,6 +12,10 @@ export class HeaderComponent implements OnInit {
   fbLogin: boolean = false
   normalLogin: boolean = false
 
+  first_name = ""
+  last_name = ""
+  full_name = ""
+
   constructor() { }
 
   ngOnInit() {
@@ -27,8 +31,11 @@ export class HeaderComponent implements OnInit {
     } else {
       this.fbLogin = false
       this.normalLogin = false
-
     }
+
+    this.first_name = localStorage.getItem("first_name")
+    this.last_name = localStorage.getItem("last_name")
+    this.full_name = this.first_name + " " + this.last_name
   }
 
   logout() {
