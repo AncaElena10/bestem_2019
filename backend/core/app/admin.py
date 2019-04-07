@@ -12,8 +12,8 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(TrashPoint)
 class TrashPointAdmin(admin.ModelAdmin):
-    list_display = ('id', 'x_coord', 'y_coord', 'user_id', 'pollution_level', 'active', 'event')
+    list_display = ('id', 'x_coord', 'y_coord', 'user', 'pollution_level', 'active', 'event')
 
 @admin.register(ExtendedUser)
 class ExtendedUserAdmin(admin.ModelAdmin):
-    list_display = ('user_id', 'phone', 'points', 'role')    
+    list_display = ('user', 'phone', 'points', 'role')    
