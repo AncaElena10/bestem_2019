@@ -220,7 +220,7 @@ class ManageEventViewSets(viewsets.ModelViewSet):
         
         email(request.user.email, subject, message)
 
-        return response.Response(serializer.data)
+        return response.Response(status=200)
 
     @list_route(methods=['post'])
     def close_event(self, request, **kwargs):
