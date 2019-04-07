@@ -51,12 +51,13 @@ class ExtendedUser(models.Model):
     VOLUNTEER = "Volunteer"
     COLLECTOR = "Collector"
     ADMIN = "Admin"
-
+    INFO = "Info"
 
     ROLE = (
         (VOLUNTEER, "Volunteer"),
         (COLLECTOR, "Collector"),
         (ADMIN, "Admin"),
+        (INFO, "Info"),
     )
 
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
