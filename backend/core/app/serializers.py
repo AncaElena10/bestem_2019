@@ -18,10 +18,10 @@ class ManageAccountSerializer(serializers.ModelSerializer):
         fields = ('id', 'email', 'username', 'password', 'first_name', 'last_name') 
 
     read_only_fields = (
-        'get_type'
+        'role'
     )
 
-    def get_type(self, obj):
+    def get_role(self, obj):
         try:
             user = ExtendedUser.objects.get(user_id=obj.id)
         except:
