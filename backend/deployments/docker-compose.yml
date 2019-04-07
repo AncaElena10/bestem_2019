@@ -21,3 +21,13 @@ services:
   depends_on:
    - postgres
   working_dir: /core/core
+ docker-angular-cli:
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+    command: ng serve --host 0.0.0.0
+    environment:
+      NODE_ENV: production
+    working_dir: /frontend
+    ports:
+     - "4200:4200"
