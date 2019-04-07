@@ -21,3 +21,10 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
+
+    read_only_fields = (
+        'total_people'
+    )
+    
+    def get_total_people(self, obj):
+        return len(obj.users) + 1
