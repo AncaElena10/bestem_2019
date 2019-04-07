@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Test, TrashPoint, Event
+from .models import Test, TrashPoint, Event, ExtendedUser
 from django.contrib.auth.models import User
 
 class TestSerializer(serializers.ModelSerializer):
@@ -15,7 +15,18 @@ class TrashPointSerializer(serializers.ModelSerializer):
 class ManageAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'password', 'first_name', 'last_name')        
+        fields = ('id', 'email', 'username', 'password', 'first_name', 'last_name') 
+
+    read_only_fields = (
+        'get_type'
+    )
+
+    def get_type(self, obj):
+        try:
+            user = ExtendedUser.objects.get(user_id=obj.id)
+        except:
+            return None
+        return user.role 
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
